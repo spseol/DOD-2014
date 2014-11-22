@@ -45,11 +45,9 @@ ApplicationWindow {
     Rectangle {
         id: wheel
 
-        property int angleRot: 0
         property real tolerance: 0.1
         property int previous: 11
 
-        rotation: wheel.angleRot
         width: 200
         height: 40
         color: "#FFC90E"
@@ -71,7 +69,7 @@ ApplicationWindow {
         onReadingChanged: {
             var value = accelometer.reading.y
 
-            wheel.angleRot = 9 * value
+            wheel.rotation = 9 * value
 
             if(value + wheel.tolerance <= wheel.previous || value - wheel.tolerance >= wheel.previous) {
                 wheel.previous = value
