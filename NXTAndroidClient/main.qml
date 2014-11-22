@@ -43,33 +43,22 @@ ApplicationWindow {
     }
 
     Rectangle {
-        id: wheel_1
+        id: wheel
 
         property int angleRot: 0
         property real tolerance: 0.1
         property int previous: 11
 
-        width: 100
+        rotation: wheel.angleRot
+        width: 200
         height: 40
         color: "#FFC90E"
-        transform: Rotation { axis: { x: 1; y: 0; z: 0 } angle: wheel_1.angleRot }
 
         anchors.verticalCenter: filler.verticalCenter
         anchors.horizontalCenter: filler.horizontalCenter
 
         Behavior on rotation {
-            RotationAnimation { duration: 2000 }
-        }
-
-        Rectangle {
-            id: wheel_2
-
-            width: wheel_1.width
-            height: wheel_1.height
-            color: wheel_1.color
-
-            anchors.right: wheel_1.left
-            anchors.top: wheel_1.top
+            RotationAnimation { duration: 300 }
         }
     }
 
@@ -82,10 +71,10 @@ ApplicationWindow {
         onReadingChanged: {
             var value = accelometer.reading.y
 
-            wheel_1.angleRot = 9* value
+            wheel.angleRot = 9 * value
 
-            if(value + wheel_1.tolerance <= wheel_1.previous || value - wheel_1.tolerance >= wheel_1.previous) {
-                wheel_1.previous = value
+            if(value + wheel.tolerance <= wheel.previous || value - wheel.tolerance >= wheel.previous) {
+                wheel.previous = value
                 //console.log(value)
             }
         }
