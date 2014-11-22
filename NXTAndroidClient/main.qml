@@ -23,9 +23,6 @@ ApplicationWindow {
                     color: "gray"
                     radius: 8
 
-
-                    property int f: styleData.handlePosition
-                    onFChanged: console.log(f)
                     Rectangle {
                         z: 2
                         height: parent.height
@@ -90,7 +87,6 @@ ApplicationWindow {
             if(value + wheel_1.tolerance <= wheel_1.previous || value - wheel_1.tolerance >= wheel_1.previous) {
                 wheel_1.previous = value
                 //console.log(value)
-                //wheel_1.angleRot = 9* accelometer.reading.y
             }
         }
     }
