@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
 import QtSensors 5.0 as Sensors
+import JSONModel 1.0
 
 ApplicationWindow {
     visible: true

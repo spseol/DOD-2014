@@ -2,7 +2,8 @@ TEMPLATE = app
 
 QT += qml quick widgets sensors
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    components/parser/jsonmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -16,3 +17,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 OTHER_FILES += \
     android/AndroidManifest.xml
+
+HEADERS += \
+    components/parser/jsonmodel.h
