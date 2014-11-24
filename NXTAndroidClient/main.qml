@@ -13,47 +13,47 @@ ApplicationWindow {
         id: filler
         anchors.fill: parent
     }
+    //--------------------------------------
+    Rectangle {
+        id: background
+        anchors.fill: filler
 
-    Slider {
-        width: 400
-        style: SliderStyle {
-                groove: Rectangle {
-                    implicitWidth: 200
-                    implicitHeight: 8
-                    color: "gray"
-                    radius: 8
-
-                    Rectangle {
-                        z: 2
-                        height: parent.height
-                        width: styleData.handlePosition
-                        color: "orange"
-                    }
-                }
-                handle: Rectangle {
-                    anchors.centerIn: parent
-                    color: control.pressed ? "white" : "lightgray"
-                    border.color: "gray"
-                    border.width: 2
-                    implicitWidth: 34
-                    implicitHeight: 34
-                    radius: 12
-                }
-            }
+        color: "orange"
     }
 
     Rectangle {
-        id: wheel
+        color: "cyan"
+        height: filler.height
+        width: 120
+    }
+
+    Rectangle {
+        color: "lightGray"
+        height: filler.height
+        width: 120
+        x: 120
+    }
+    //------------------------------------------
+
+    Rectangle {
+        id: goWidget
+
+        width: filler.width / 3.0
+        height: filler.height
+        color: "red"
+        anchors.right: filler.right
+    }
+
+    Rectangle {
+        id: mask
 
         property real tolerance: 0.1
         property int previous: 11
 
-        width: 200
-        height: 40
-        color: "#FFC90E"
-
-        anchors.verticalCenter: filler.verticalCenter
-        anchors.horizontalCenter: filler.horizontalCenter
+        y: 0 - height
+        width: Math.sqrt(Math.pow(filler.width, 2) + Math.pow(filler.height, 2))
+        height: filler.height * 1.5
+        color: Qt.rgba(255, 255, 255, 0.2)//"#FFC90E"
 
         Behavior on rotation {
             RotationAnimation { duration: 300 }
@@ -67,12 +67,22 @@ ApplicationWindow {
         dataRate: 10000
 
         onReadingChanged: {
-            var value = accelometer.reading.y
+            var value = -(accelometer.reading.y)
 
-            wheel.rotation = 9 * value
+            if(value > 0 && mask.rotation > 0) {
+                mask.transformOrigin = Item.BottomLeft
+                mask.x = 0
+            }
 
-            if(value + wheel.tolerance <= wheel.previous || value - wheel.tolerance >= wheel.previous) {
-                wheel.previous = value
+            else if(value < 0 && mask.rotation < 0){
+                mask.transformOrigin = Item.BottomRight
+                mask.x = 0 - (mask.width - filler.width)
+            }
+
+            mask.rotation = 9 * value
+
+            if(value + mask.tolerance <= mask.previous || value - mask.tolerance >= mask.previous) {
+                mask.previous = value
                 //console.log(value)
             }
         }
