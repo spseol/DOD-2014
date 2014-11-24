@@ -76,14 +76,6 @@ ApplicationWindow {
         }
     }
 
-    Triangle {
-        x: 50
-        y: 50
-        width: 200
-        height: 150
-        color: "green"
-    }
-
     Sensors.Accelerometer {
         id: accelometer
 
