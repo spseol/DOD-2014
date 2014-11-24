@@ -35,6 +35,11 @@ ApplicationWindow {
 
         Text {
             text: qsTr("GO")
+            color: "white"
+
+            font.bold: Font.Black
+            font.family: "RobotoBlack"
+            font.pixelSize: filler.height / 5
 
             anchors.centerIn: parent
         }
