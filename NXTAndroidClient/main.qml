@@ -68,7 +68,7 @@ ApplicationWindow {
 
         y: 0 - height
         width: Math.sqrt(Math.pow(filler.width, 2) + Math.pow(filler.height, 2))
-        height: filler.height * 1.5
+        height: filler.width
         color: Qt.rgba(255, 255, 255, 0.7)
 
         Behavior on rotation {
