@@ -19,7 +19,7 @@ ApplicationWindow {
 
         width: filler.width * (3.0 / 13.0)
         height: filler.height
-        color: "gray"
+        color: "lightGray"
 
         anchors.right: goWidget.left
     }
@@ -32,6 +32,12 @@ ApplicationWindow {
         color: "red"
 
         anchors.right: filler.right
+
+        Text {
+            text: qsTr("GO")
+
+            anchors.centerIn: parent
+        }
     }
 
     Rectangle {
@@ -43,7 +49,7 @@ ApplicationWindow {
         y: 0 - height
         width: Math.sqrt(Math.pow(filler.width, 2) + Math.pow(filler.height, 2))
         height: filler.height * 1.5
-        color: Qt.rgba(255, 255, 255, 0.2)//"#FFC90E"
+        color: Qt.rgba(255, 255, 255, 0.7)
 
         Behavior on rotation {
             RotationAnimation { duration: 300 }
