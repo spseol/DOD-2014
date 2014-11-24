@@ -13,34 +13,24 @@ ApplicationWindow {
         id: filler
         anchors.fill: parent
     }
-    //--------------------------------------
-    Rectangle {
-        id: background
-        anchors.fill: filler
-
-        color: "orange"
-    }
 
     Rectangle {
-        color: "cyan"
+        id: infoWidget
+
+        width: filler.width * (3.0 / 13.0)
         height: filler.height
-        width: 120
-    }
+        color: "gray"
 
-    Rectangle {
-        color: "lightGray"
-        height: filler.height
-        width: 120
-        x: 120
+        anchors.right: goWidget.left
     }
-    //------------------------------------------
 
     Rectangle {
         id: goWidget
 
-        width: filler.width / 3.0
+        width: filler.width * (5.0 / 13.0)
         height: filler.height
         color: "red"
+
         anchors.right: filler.right
     }
 
