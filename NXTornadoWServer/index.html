@@ -2,26 +2,94 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>NXTornado web controller</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <style>
+    .icon-large {
+        background-image: url("https://raw.githubusercontent.com/marcoceppi/bootstrap-glyphicons/master/glyphicons.png");
+        background-position: 24px 24px;
+        background-repeat: no-repeat;
+        display: inline-block;
+        height: 28px;
+        line-height: 28px;
+        vertical-align: text-bottom;
+        width: 28px;
+    }
+    .icon-large.icon-left-arrow{ background-position: -138px -880px;  } 
+    .icon-large.icon-right-arrow{ background-position: -138px -908px;  } 
+    .icon-large.icon-down-arrow{ background-position: -138px -936px;  } 
+    .icon-large.icon-up-arrow{ background-position: -138px -966px;  } 
+    .controller {
+        background-color: #D8D8D8;
+        border-radius: 20px;
+        border: 1px solid #BBBBBB;
+        width: 60%;
+        margin: 0 auto;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+    </style>
 </head>
 <body>
-    <h1>{{ name }}</h1>
-    {{ ws_clients }}
+<div class="container">
+    <h1 class="text-center">
+        <div>Brick and connect are 
+            <button id="brick-ok" class="btn btn-success btn-lg">OK</button>
+            <button id="brick-not-ok" class="btn btn-danger btn-lg">KO</button>
+        </div>
+    </h1>
 
-	<div class="container">
-		<button class="btn btn-primary btn-warning"> TURN! </button>
-		<input type="number" value="360">
+    <!-- {{ ws_clients }} -->
+    <div class="controller">
+        <h2>Robot controller</h2>
+        <form id="action-form" class="text-center">
+            <div style="margin-bottom:5px;">
+                <button class="btn text-center btn-success"><i class="icon-large icon-up-arrow"></i></button>
+            </div>
+            <button class="btn text-center btn-success"><i class="icon-large icon-left-arrow"></i></button>
+            <button class="btn text-center btn-success"><i class="icon-large icon-down-arrow"></i></button>
+            <button class="btn text-center btn-success"><i class="icon-large icon-right-arrow"></i></button>
+            <hr>
+            <input type="number" value="360">
+            <input type="submit" id="turn" class="btn btn-primary btn-danger" value="TURN">
+        </form>
+    </div>
+    
 	</div>
     <script>
+        var $brickFound = $('#brick-not-ok');
+        var $brickNotFound = $('#brick-ok');
+        var $form = $('#action-form');
         var ws = new WebSocket('ws://' + window.location.host + '/ws');
-        var $button = $('button');
         var $number = $('input[type=number]');
-        $button.click(function() {
-        	ws.send($number.val());
+        var $button = $('submit#turn');
+        $form.submit(function(event) {
+            event.preventDefault();
+            ws.send($number.val());
         });
+        ws.onmessage = function (evt) {
+            message = evt.data;
+            console.log(message);
+            if (message=="brick-ok") {
+                $brickFound.fadeIn(500);
+                $brickNotFound.fadeOut(500);
+            }
+
+        };
+        exit = function (evt) {
+            $brickFound.fadeIn(500);
+            $brickNotFound.fadeOut(500);
+            alert('shit!');
+        };
+        ws.onclose = exit;
+        ws.onerror = exit;
+        {% if brick_found %}
+            $brickFound.hide();
+        {% else %}
+            $brickNotFound.hide();
+        {% end %}
     </script>
 </body>
 </html>

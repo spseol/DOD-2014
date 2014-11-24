@@ -1,31 +1,52 @@
 from tornado import websocket, web, ioloop, options
-import json
 from tornado import autoreload
 
-from nxt.locator import find_one_brick
+from nxt.locator import find_one_brick, BrickNotFoundError
 from nxt.motor import Motor, PORT_B
 
 
 ws_clients = []
-robot = {}
 
 
-def init_brick():
-    robot['brick'] = find_one_brick()
-    print(' *** BRICK FOUND *** ')
-    robot['motor'] = Motor(robot['brick'], PORT_B)
+class BrickController():
+    brick = None
+    brick_found = False
+    motor = None
+    searching = False
 
 
-init_brick()
+    @classmethod
+    def init_brick(cls):
+        """
+        decompose this!
+        """
+        if cls.searching:
+            print(' *** ABORTING REQUEST FOR BRICK *** ')
+            return
+        try:
+            print(' *** BRICK FINDING *** ')
+            cls.searching = True
+            cls.brick = find_one_brick()
+        except BrickNotFoundError:
+            return
+        cls.searching = False
+        print(' *** BRICK FOUND *** ')
+        cls.motor = Motor(cls.brick, PORT_B)
+        assert isinstance(cls.motor, Motor)
+        cls.brick_found = True
 
 
 class IndexHandler(web.RequestHandler):
     def get(self):
-        self.render("index.html", name='NXTornadoWServer', ws_clients=len(ws_clients))
+        self.render("index.html", brick_found=BrickController.brick_found, ws_clients=len(ws_clients))
 
 
 class SocketHandler(websocket.WebSocketHandler):
     def open(self):
+        if not BrickController.brick_found:
+            BrickController.init_brick()
+            if BrickController.brick_found:
+                self.write_message('brick-ok')
         if self not in ws_clients:
             ws_clients.append(self)
 
@@ -34,35 +55,18 @@ class SocketHandler(websocket.WebSocketHandler):
             ws_clients.remove(self)
 
     def on_message(self, message):
-        try:
-            deg = int(message)
-        except:
-            pass
-        robot['motor'].turn(100, deg)
-
-
-class ApiHandler(web.RequestHandler):
-    @web.asynchronous
-    def get(self, *args):
-        self.finish()
-        id = self.get_argument("id")
-        value = self.get_argument("value")
-        data = {"id": id, "value": value}
-        data = json.dumps(data)
-        for c in ws_clients:
-            c.write_message(data)
-
-    @web.asynchronous
-    def post(self):
-        pass
+        self.write_message('ok!')
+        if BrickController.brick_found:
+            try:
+                deg = int(message)
+            except:
+                deg = 0
+            BrickController.motor.turn(100, deg)
 
 
 app = web.Application([
     (r'/', IndexHandler),
     (r'/ws', SocketHandler),
-    (r'/api', ApiHandler),
-    (r'/(favicon.ico)', web.StaticFileHandler, {'path': '../'}),
-    (r'/(rest_api_example.png)', web.StaticFileHandler, {'path': './'}),
 ])
 
 if __name__ == '__main__':
