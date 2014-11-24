@@ -22,6 +22,21 @@ ApplicationWindow {
         color: "lightGray"
 
         anchors.right: goWidget.left
+
+        Item {
+            anchors.centerIn: parent
+
+            Text {
+                id: angleInfo
+
+                text: mask.rotation.toFixed(0) + "°"
+                color: "gray"
+
+                font.pixelSize: filler.height / 8
+
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
     }
 
     Rectangle {
@@ -59,6 +74,14 @@ ApplicationWindow {
         Behavior on rotation {
             RotationAnimation { duration: 300 }
         }
+    }
+
+    Triangle {
+        x: 50
+        y: 50
+        width: 200
+        height: 150
+        color: "green"
     }
 
     Sensors.Accelerometer {
