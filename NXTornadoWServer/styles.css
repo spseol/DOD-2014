@@ -1,0 +1,48 @@
+.block {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px 20px;
+    background-color: #D8D8D8;
+    border-radius: 20px;
+    border: 1px solid #BBBBBB;
+}
+
+.controller {
+    position: relative;
+}
+
+.controller .cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(50, 50, 50, 0.9);
+    width: 100%;
+    height: 100%;
+    padding-top: 50px;
+    border-radius: 20px;
+}
+
+.logger {
+    padding-top: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.icon-large {
+    background-image: url("https://raw.githubusercontent.com/marcoceppi/bootstrap-glyphicons/master/glyphicons.png");
+    background-position: 24px 24px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    vertical-align: text-bottom;
+    width: 28px;
+}
+
+.icon-large.icon-left-arrow{ background-position: -138px -880px;  } 
+.icon-large.icon-right-arrow{ background-position: -138px -908px;  } 
+.icon-large.icon-down-arrow{ background-position: -138px -936px;  } 
+.icon-large.icon-up-arrow{ background-position: -138px -966px;  }
