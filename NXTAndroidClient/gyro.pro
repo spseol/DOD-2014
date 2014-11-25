@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets sensors
+QT += qml quick widgets sensors websockets
 
 SOURCES += main.cpp \
     components/parser/jsonmodel.cpp

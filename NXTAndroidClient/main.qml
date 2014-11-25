@@ -3,6 +3,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
 import QtSensors 5.0 as Sensors
 import JSONModel 1.0
+import Qt.WebSockets 1.0
 
 ApplicationWindow {
     visible: true
@@ -14,6 +15,42 @@ ApplicationWindow {
         id: filler
         anchors.fill: parent
     }
+
+    //------------DATA TRANSFER-----------
+    WebSocket {
+        id: socket
+
+        active: true
+        url: "ws://192.168.2.104:8888/ws"
+
+        onStatusChanged: {
+            var actualStatus = socket.status
+
+            switch(actualStatus) {
+                case WebSocket.Connecting:
+                    console.log("Connecting");
+                    break;
+
+                case WebSocket.Open:
+                    console.log("Open");
+                    break;
+
+                case WebSocket.Closing:
+                    console.log("Closing");
+                    break;
+
+                case WebSocket.Closed:
+                    console.log("Closed")
+                    break;
+
+                case WebSocket.Error:
+                    console.log("Error (" + socket.errorString + ")")
+                    break;
+            }
+        }
+    }
+
+    //------------------------------------
 
     //----------------DATA----------------
     Rectangle {
@@ -68,9 +105,6 @@ ApplicationWindow {
     Rectangle {
         id: mask
 
-        property real tolerance: 0.1
-        property int previous: 11
-
         y: 0 - height
         width: Math.sqrt(Math.pow(filler.width, 2) + Math.pow(filler.height, 2))
         height: filler.width
@@ -83,6 +117,9 @@ ApplicationWindow {
 
     Sensors.Accelerometer {
         id: accelometer
+
+        property real tolerance: 1
+        property int previous: 11
 
         active: true
         dataRate: 10000
@@ -102,8 +139,8 @@ ApplicationWindow {
 
             mask.rotation = 9 * value
 
-            if(value + mask.tolerance <= mask.previous || value - mask.tolerance >= mask.previous) {
-                mask.previous = value
+            if(value + accelometer.tolerance <= accelometer.previous || value - accelometer.tolerance >= accelometer.previous) {
+                accelometer.previous = value
                 //console.log(value)
             }
         }
