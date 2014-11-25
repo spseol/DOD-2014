@@ -15,6 +15,7 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    //----------------DATA----------------
     Rectangle {
         id: infoWidget
 
@@ -39,7 +40,9 @@ ApplicationWindow {
             }
         }
     }
+    //------------------------------------
 
+    //----------------PEDAL---------------
     Rectangle {
         id: goWidget
 
@@ -60,6 +63,7 @@ ApplicationWindow {
             anchors.centerIn: parent
         }
     }
+    //------------------------------------
 
     Rectangle {
         id: mask
