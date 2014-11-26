@@ -53,6 +53,27 @@ ApplicationWindow {
 
     //------------------------------------
 
+    //----------------SPEED---------------
+    SliderWidget {
+        id: slider
+
+        width: filler.width * (5.0 / 13.0)
+        height: filler.height
+        data: 0.70
+        activeColor: "cyan"
+        backgroundColor: "lightGray"
+
+        anchors.left: filler.left
+    }
+
+    MouseArea {
+        anchors.fill: slider
+        onPressed: slider.handleMousePressed(mouse.y)
+        onMouseYChanged: slider.handleMouseMove(mouse.y, pressed)
+    }
+
+    //------------------------------------
+
     //----------------DATA----------------
     Rectangle {
         id: infoWidget
@@ -103,15 +124,6 @@ ApplicationWindow {
     }
     //------------------------------------
 
-    SliderWidget {
-        anchors.left: filler.left
-        width: 200
-        height: filler.height
-         data: 0.70
-        activeColor: "cyan"
-        backgroundColor: "gray"
-    }
-
     Rectangle {
         id: mask
 
@@ -147,7 +159,7 @@ ApplicationWindow {
         dataRate: 10000
 
         onReadingChanged: {
-            var value = -(accelometer.reading.x)
+            var value = -(accelometer.reading.y)
 
             if(value > 0 && mask.rotation > 0) {
                 mask.transformOrigin = Item.BottomLeft

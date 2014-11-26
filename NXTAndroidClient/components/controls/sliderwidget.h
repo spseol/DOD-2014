@@ -17,6 +17,8 @@ class SliderWidget : public QQuickPaintedItem
         QColor p_backgroundColor;
         qreal p_data;
 
+        int mouseY;
+
     public:
         explicit SliderWidget(QQuickItem *parent = 0);
 
@@ -31,6 +33,10 @@ class SliderWidget : public QQuickPaintedItem
         QColor backgroundColor() const;
         qreal data()const;
         /*-------------------------*/
+
+    public slots:
+        void handleMousePressed(int y);
+        void handleMouseMove(int y, bool pressed);
 
     signals:
         void activeColorChanged();

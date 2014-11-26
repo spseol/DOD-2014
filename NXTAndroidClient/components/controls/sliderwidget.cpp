@@ -5,6 +5,25 @@ SliderWidget::SliderWidget(QQuickItem *parent) :
 {
 }
 
+void SliderWidget::handleMousePressed(int y)
+{
+    mouseY = y;
+}
+
+void SliderWidget::handleMouseMove(int y, bool pressed)
+{
+    if(!pressed)
+        return;
+
+    qreal boundingHeight = boundingRect().height();
+
+    p_data = (mouseY - y) / boundingHeight + (boundingHeight - mouseY) / boundingHeight;
+    p_data = (p_data <= 0.0) ? 0.0 :p_data;
+    p_data = (p_data >= 1.0) ? 1.0 :p_data;
+
+    this->update();
+}
+
 void SliderWidget::paint(QPainter *painter)
 {
     painter->setRenderHint(QPainter::HighQualityAntialiasing);
