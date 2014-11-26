@@ -20,7 +20,7 @@ ApplicationWindow {
     WebSocket {
         id: socket
 
-        active: true
+        active: false
         url: "ws://192.168.2.104:8888/ws/control"
 
         onStatusChanged: {
@@ -120,7 +120,9 @@ ApplicationWindow {
 
         placeholderText: "Zadejte IP"
         onAccepted: {
-            console.log("---" + inputID.text)
+            socket.url = "ws://" + inputID.text + "/ws/control"
+            socket.active = true
+            console.log(socket.url)
             inputID.visible = false
         }
     }
