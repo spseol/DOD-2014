@@ -20,11 +20,11 @@ $(function() {
     var $brickTitleKO = $('#brick-ko');
     var $cover = $('#cover');
     var $form = $('#action-form');
-
+    var log = getLogger();
     var ws = new WebSocket('ws://' + window.location.host + '/ws/control');
     var $number = $('input[type=number]');
     var $button = $('submit#turn');
-    var log = getLogger();
+    
     var setBrick = function(enable) {
         if (enable) {
             $brickTitleKO.fadeOut(500);
@@ -49,7 +49,7 @@ $(function() {
     });
     exit = function (evt) {
         setBrick(false);
-        log('Communication error occured!', 'danger');
+        log('Communication error occured!', 'danger', new Date());
     };
     ws.onclose = exit;
     ws.onerror = exit;

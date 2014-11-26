@@ -31,6 +31,11 @@
     margin-bottom: 20px;
 }
 
+.text-error {
+    color: red;
+    font-weight: bold;
+}
+
 .icon-large {
     background-image: url("https://raw.githubusercontent.com/marcoceppi/bootstrap-glyphicons/master/glyphicons.png");
     background-position: 24px 24px;
