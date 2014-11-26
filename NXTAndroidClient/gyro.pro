@@ -3,7 +3,8 @@ TEMPLATE = app
 QT += qml quick widgets sensors websockets
 
 SOURCES += main.cpp \
-    components/parser/jsonmodel.cpp
+    components/parser/jsonmodel.cpp \
+    components/controls/sliderwidget.cpp
 
 RESOURCES += qml.qrc
 
@@ -19,4 +20,5 @@ OTHER_FILES += \
     android/AndroidManifest.xml
 
 HEADERS += \
-    components/parser/jsonmodel.h
+    components/parser/jsonmodel.h \
+    components/controls/sliderwidget.h

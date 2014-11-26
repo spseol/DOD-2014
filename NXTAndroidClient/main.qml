@@ -3,6 +3,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
 import QtSensors 5.0 as Sensors
 import JSONModel 1.0
+import SliderWidget 1.0
 import Qt.WebSockets 1.0
 
 ApplicationWindow {
@@ -101,6 +102,15 @@ ApplicationWindow {
         }
     }
     //------------------------------------
+
+    SliderWidget {
+        anchors.left: filler.left
+        width: 200
+        height: filler.height
+         data: 0.70
+        activeColor: "cyan"
+        backgroundColor: "gray"
+    }
 
     Rectangle {
         id: mask
