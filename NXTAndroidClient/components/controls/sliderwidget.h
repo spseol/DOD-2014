@@ -22,7 +22,7 @@ class SliderWidget : public QQuickPaintedItem
     public:
         explicit SliderWidget(QQuickItem *parent = 0);
 
-        void paint(QPainter *painter);
+        virtual void paint(QPainter *painter);
 
         /*---Setters and getters---*/
         void setActiveColor(QColor& value);
