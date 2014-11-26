@@ -21,7 +21,7 @@ ApplicationWindow {
         id: socket
 
         active: true
-        url: "ws://192.168.2.104:8888/ws"
+        url: "ws://192.168.2.104:8888/ws/control"
 
         onStatusChanged: {
             var actualStatus = socket.status
@@ -115,6 +115,16 @@ ApplicationWindow {
         }
     }
 
+    TextField {
+        id: inputID
+
+        placeholderText: "Zadejte IP"
+        onAccepted: {
+            console.log("---" + inputID.text)
+            inputID.visible = false
+        }
+    }
+
     Sensors.Accelerometer {
         id: accelometer
 
@@ -125,7 +135,7 @@ ApplicationWindow {
         dataRate: 10000
 
         onReadingChanged: {
-            var value = -(accelometer.reading.y)
+            var value = -(accelometer.reading.x)
 
             if(value > 0 && mask.rotation > 0) {
                 mask.transformOrigin = Item.BottomLeft
