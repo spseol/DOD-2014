@@ -11,8 +11,8 @@ start_time = None
 
 def is_port_active(port):
     # some magic about GPIO
-    r = randint(0, 1000)
-    return r > 999
+    r = randint(0, 10000)
+    return r > 9999
     # some magic about GPIO
 
 
