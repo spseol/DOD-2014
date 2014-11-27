@@ -1,8 +1,10 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick widgets sensors websockets
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    components/parser/jsonparser.cpp \
+    components/controls/sliderwidget.cpp
 
 RESOURCES += qml.qrc
 
@@ -11,3 +13,12 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+OTHER_FILES += \
+    android/AndroidManifest.xml
+
+HEADERS += \
+    components/parser/jsonparser.h \
+    components/controls/sliderwidget.h
