@@ -31,6 +31,6 @@ class ControlSocketHandler(WebSocketHandler):
         except:
             self.write_message('Are you fucking kidding me?')
             return
-        logging.info('Received message:\n{}'.format(msg_dict))
+        #logging.info('Received message:\n{}'.format(msg_dict))
         BrickController.process(**msg_dict)
 

@@ -61,23 +61,18 @@ $(function() {
         switch (key) {
             case keys.left:
                 msg = createControlMessage(100, -0.5, 0);
-                e.preventDefault();
                 break
             case keys.up:
                 msg = createControlMessage(100, 0, 0);
-                e.preventDefault();
                 break
             case keys.right:
                 msg = createControlMessage(100, 0.5, 0);
-                e.preventDefault();
                 break
             case keys.down:
                 msg = createControlMessage(100, 0, 1);
-                e.preventDefault();
                 break
             case keys.stop:
                 msg = createControlMessage(0, 0, 0);
-                e.preventDefault();
                 break
             default:
                 return e
@@ -105,11 +100,6 @@ $(function() {
         console.log(state);
         toggleState(state.brick_found, $brickTitleOK, $brickTitleKO, $cover);
     };
-
-    $form.submit(function(event) {
-        event.preventDefault();
-        ws.send($number.val());
-    });
 
     getErrorFun = function (message, msg_class) {
         return function(evt) {  
