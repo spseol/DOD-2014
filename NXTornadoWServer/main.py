@@ -39,6 +39,7 @@ app = web.Application([
 
 if __name__ == '__main__':
     init_logging()
+    on_reload()
     options.parse_command_line()
     app.listen(8888)
     ioloop = ioloop.IOLoop().instance()

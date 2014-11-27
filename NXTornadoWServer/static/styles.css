@@ -29,6 +29,14 @@
     padding-top: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+    height: 500px;
+    max-height: 500px;
+}
+
+.logger > div {
+    height: 400px;
+    max-height: 400px;
+    overflow: auto;
 }
 
 .text-error {
@@ -47,7 +55,7 @@
     width: 28px;
 }
 
-.icon-large.icon-left-arrow{ background-position: -138px -880px;  } 
-.icon-large.icon-right-arrow{ background-position: -138px -908px;  } 
-.icon-large.icon-down-arrow{ background-position: -138px -936px;  } 
-.icon-large.icon-up-arrow{ background-position: -138px -966px;  }
+.icon-large.icon-left-arrow { background-position: -138px -880px;  } 
+.icon-large.icon-right-arrow { background-position: -138px -908px;  } 
+.icon-large.icon-down-arrow { background-position: -138px -936px;  } 
+.icon-large.icon-up-arrow { background-position: -138px -966px;  }

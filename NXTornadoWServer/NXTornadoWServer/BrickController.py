@@ -37,6 +37,18 @@ class BrickController():
         assert isinstance(cls.motor, Motor)
 
     @classmethod
+    def process(cls, **commands):
+        for key, value in commands.items():
+            if getattr(cls, key, value) != value:
+                #proccess new value
+                print('{} new = {}'.format(key, value))
+            else:
+                #same as last
+                print('{} same'.format(key, value))
+            setattr(cls, key, value)
+
+
+    @classmethod
     def get_state(cls):
         return {
             'brick_found': cls.brick_found,

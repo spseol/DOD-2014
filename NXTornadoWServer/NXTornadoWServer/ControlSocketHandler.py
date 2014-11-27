@@ -1,4 +1,5 @@
 import logging
+from tornado.escape import json_decode, json_encode
 from tornado.gen import coroutine
 from tornado.web import asynchronous
 
@@ -25,10 +26,11 @@ class ControlSocketHandler(WebSocketHandler):
         logging.info('WS closed, {} sockets active.'.format(len(self.clients)))
 
     def on_message(self, message):
-        logging.info('Received message:\n"{}"'.format((message)))
-        if BrickController.brick_found:
-            try:
-                deg = int(message)
-            except:
-                deg = 0
-            BrickController.motor.turn(100, deg)
+        try:
+            msg_dict = json_decode(message)
+        except:
+            self.write_message('Are you fucking kidding me?')
+            return
+        logging.info('Received message:\n{}'.format(msg_dict))
+        BrickController.process(**msg_dict)
+

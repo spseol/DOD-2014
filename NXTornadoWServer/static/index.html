@@ -22,11 +22,11 @@
         <h2>Robot controller</h2>
         <form id="action-form" class="text-center">
             <div style="margin-bottom:5px;">
-                <button class="btn text-center btn-success"><i class="icon-large icon-up-arrow"></i></button>
+                <button class="btn text-center btn-success" data-key="38"><i class="icon-large icon-up-arrow"></i></button>
             </div>
-            <button class="btn text-center btn-success"><i class="icon-large icon-left-arrow"></i></button>
-            <button class="btn text-center btn-success"><i class="icon-large icon-down-arrow"></i></button>
-            <button class="btn text-center btn-success"><i class="icon-large icon-right-arrow"></i></button>
+            <button class="btn text-center btn-success" data-key="37"><i class="icon-large icon-left-arrow"></i></button>
+            <button class="btn text-center btn-success" data-key="40"><i class="icon-large icon-down-arrow"></i></button>
+            <button class="btn text-center btn-success" data-key="39"><i class="icon-large icon-right-arrow"></i></button>
             <hr>
             <input type="number" value="360">
             <input type="submit" id="turn" class="btn btn-primary btn-danger" value="TURN">
@@ -35,9 +35,11 @@
     </div>
     <div class="logger block">
         <h2 class="text-center">Server logger</h2>
-        <samp id="logger">
+        <div>
+            <samp id="logger">
 
-        </samp>
+            </samp>
+        </div>
     </div>
 	</div>
     <script>
