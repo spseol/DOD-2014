@@ -4,7 +4,8 @@ QT += qml quick widgets sensors websockets
 
 SOURCES += main.cpp \
     components/parser/jsonparser.cpp \
-    components/controls/sliderwidget.cpp
+    components/controls/sliderwidget.cpp \
+    components/controls/gradientwidget.cpp
 
 RESOURCES += qml.qrc
 
@@ -21,4 +22,5 @@ OTHER_FILES += \
 
 HEADERS += \
     components/parser/jsonparser.h \
-    components/controls/sliderwidget.h
+    components/controls/sliderwidget.h \
+    components/controls/gradientwidget.h
