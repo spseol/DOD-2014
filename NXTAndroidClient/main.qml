@@ -11,6 +11,7 @@ ApplicationWindow {
     width: 640
     height: 480
     title: qsTr("Hello World")
+    //flags: ApplicationWindow.FullScreen
 
     Item {
         id: filler
