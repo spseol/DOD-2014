@@ -7,7 +7,26 @@ GradientWidget::GradientWidget(QQuickItem *parent) :
 
 void GradientWidget::paint(QPainter *painter)
 {
+    QPointF start;
+    QPointF stop;
 
+    switch (p_startPoint) {
+        case TopLeftCorner:
+            start = boundingRect().topLeft();
+            stop = boundingRect().bottomRight();
+            break;
+
+        case TopRightCorner:
+            start = boundingRect().topRight();
+            stop = boundingRect().bottomLeft();
+            break;
+    }
+
+    QLinearGradient gradient(start, stop);
+
+    gradient.setColorAt(0, QColor(p_colors[0]));
+    gradient.setColorAt(1, QColor(p_colors[1]));
+    painter->fillRect(boundingRect(), gradient);
 }
 
 void GradientWidget::setStartPoint(int &value)

@@ -17,7 +17,7 @@ class GradientWidget : public QQuickPaintedItem
         QStringList p_colors;
 
     public:
-        enum point { TopLeftCorner, TopRightCorner, BottomRightCorner, BottomLeftCorner };
+        enum point { TopLeftCorner, TopRightCorner };
 
         explicit GradientWidget(QQuickItem *parent = 0);
 
