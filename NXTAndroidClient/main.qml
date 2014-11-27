@@ -90,7 +90,7 @@ ApplicationWindow {
             Text {
                 id: angleInfo
 
-                text: mask.rotation.toFixed(0) + "°"
+                text: accelometer.angle.toFixed(0) + "°"
                 color: "gray"
 
                 font.pixelSize: filler.height / 8
@@ -152,14 +152,21 @@ ApplicationWindow {
     Sensors.Accelerometer {
         id: accelometer
 
-        property real tolerance: 1
+        property real tolerance: 0.3
+        property real lock: (Math.atan(filler.height / filler.width) / Math.PI) * 180
         property int previous: 11
+        property real angle
+
+        Behavior on angle {
+            NumberAnimation { duration: 300 }
+        }
 
         active: true
         dataRate: 10000
 
         onReadingChanged: {
             var value = -(accelometer.reading.y)
+            var raw_value = -accelometer.reading.y
 
             if(value > 0 && mask.rotation > 0) {
                 mask.transformOrigin = Item.BottomLeft
@@ -171,11 +178,13 @@ ApplicationWindow {
                 mask.x = 0 - (mask.width - filler.width)
             }
 
+            value = (value *9 >= accelometer.lock) ? accelometer.lock / 9 :value
+            value = (value * 9 <= -accelometer.lock) ?(-accelometer.lock) / 9: value
             mask.rotation = 9 * value
+            accelometer.angle = raw_value * 9
 
-            if(value + accelometer.tolerance <= accelometer.previous || value - accelometer.tolerance >= accelometer.previous) {
-                accelometer.previous = value
-                //console.log(value)
+            if(raw_value + accelometer.tolerance <= accelometer.previous || raw_value - accelometer.tolerance >= accelometer.previous) {
+                accelometer.previous = raw_value
             }
         }
     }
