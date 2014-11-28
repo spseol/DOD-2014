@@ -45,6 +45,8 @@ class BrickController():
 
     @classmethod
     def process(cls, **commands):
+	if not cls.brick_found:
+	    return
         for key, value in commands.items():
             if getattr(cls, key, value) != value:
                 #proccess new value
@@ -62,17 +64,16 @@ class BrickController():
                         degs = abs(want_degs - cls.steering_degs)
                     logging.info('{} to {}'.format(degs, ('left', 'right')[tacho > 0]))
                     try:
-                        cls.steering_motor.turn(tacho, degs, False)
+                        cls.steering_motor.weak_turn(tacho, degs)
                         cls.steering_degs = want_degs
                     except BlockedException:
                         logging.warning('Steering motor blocked!')
                     print(cls.steering_motor._get_state().to_list())
                 if key in (cls.REVERSE_KEY, cls.TROTTLE_KEY):
                     if commands[cls.REVERSE_KEY] == 0:
-                        cls.main_motor.run(int(commands[cls.TROTTLE_KEY]*127/100.0))
+                       	cls.main_motor.run(int(commands[cls.TROTTLE_KEY]*127/100.0))
                     else:
-                        cls.main_motor.run(int(-commands[cls.TROTTLE_KEY]*127/100.0))
-
+                       	cls.main_motor.run(int(-commands[cls.TROTTLE_KEY]*127/100.0))
             else:
                 #same as last
                 print('{} same'.format(key, value))

@@ -28,14 +28,6 @@ function toggleState(enable, $brickTitleOK, $brickTitleKO, $cover) {
     }
 };
 
-function createControlMessage(trottle, steering, reverse) {
-    return {
-        "trottle": trottle,
-        "steering": steering,
-        "reverse": reverse
-    }
-};
-
 $(function() {
     var $brickTitleOK = $('#brick-ok');
     var $brickTitleKO = $('#brick-ko');
@@ -45,50 +37,69 @@ $(function() {
     var ws = new WebSocket('ws://' + window.location.host + '/ws/control');
     var $number = $('input[type=number]');
     var $button = $('submit#turn');
-    
-    var lastMsg = {};
-    var arrowKeyDown = function(e) {
-        keys = {
+	var lastMsg = "";
+    var keys = {
             left: 37,
             up: 38,
             right: 39,
             down: 40,
             stop: 32
-        }
-        var e = e || window.event;
-        var key = e.keyCode;
-        var msg = createControlMessage(0, 0, 0);
-        switch (key) {
-            case keys.left:
-                msg = createControlMessage(100, -0.5, 0);
-                break
-            case keys.up:
-                msg = createControlMessage(100, 0, 0);
-                break
-            case keys.right:
-                msg = createControlMessage(100, 0.5, 0);
-                break
-            case keys.down:
-                msg = createControlMessage(100, 0, 1);
-                break
-            case keys.stop:
-                msg = createControlMessage(0, 0, 0);
-                break
-            default:
-                return e
-                break
-        }
-        if (e.type == "keyup") {
-            msg = createControlMessage(0, 0, 0);
-        }
-        if (JSON.stringify(msg) == JSON.stringify(lastMsg)) {
-            return e
-        }
-        console.log(msg);
-        lastMsg = msg;
-        ws.send(JSON.stringify(msg));
+        };
+	var keysActive = {
+		    "37": false,
+            "38": false,
+            "39": false,
+            "40": false,
+            "32": false
+	};
+	var generateStatusJSON = function() {
+		console.log(keysActive);
+		var obj = {
+			"steering":0,
+			"trottle":0,
+			"reverse":0
+			};
+		if (keysActive[keys.right]) {
+			obj["steering"] = 0.5;
+		} else if (keysActive[keys.left]) {
+			obj["steering"] = -0.5;
+		} else if (keysActive[keys.left] && (keysActive[keys.right])) {
+			obj["steering"] = 0;
+		} else if (keysActive[keys.down]) {
+			obj["trottle"] = 100;
+			obj["reverse"] = 1;
+		} else if (keysActive[keys.up]) {
+			obj["trottle"] = 100;
+			obj["reverse"] = 0;
+		} else if (keysActive[keys.stop]) {
+			obj = {
+				"steering":0,
+				"trottle":0,
+				"reverse":0
+			}
+		}
+		return obj
+	};
+    var refreshRobot = function() {
+        var obj = generateStatusJSON();
+		var msg = JSON.stringify(obj);
+		if (msg == lastMsg) {
+			return
+		} else {
+			lastMsg = msg;
+			console.log(obj);
+			ws.send(msg);
+		};
     };
-    $(window).keydown(arrowKeyDown).keyup(arrowKeyDown);
+	var keyDown = function(e) {
+		keysActive[e.keyCode] = true;
+		refreshRobot();
+	};
+	var keyUp = function(e) {
+		keysActive[e.keyCode] = false;
+		refreshRobot();
+	};
+    $(window).keydown(keyDown).keyup(keyUp);
 
     $form.find('button').click(function(event) {
         arrowKeyDown({keyCode: $(this).data('key')*1});
