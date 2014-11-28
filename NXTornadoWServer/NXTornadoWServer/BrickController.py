@@ -15,6 +15,7 @@ class BrickController():
     main_motor = None
     TROTTLE_KEY = 'trottle'
     REVERSE_KEY = 'reverse'
+    FULL_SIDE_STEER = 1400
 
     @classmethod
     def init_brick(cls):
@@ -53,7 +54,7 @@ class BrickController():
                 print('{} new = {}'.format(key, value))
                 if key == cls.STEERING_KEY:
                     assert isinstance(cls.steering_motor, Motor)
-                    want_degs = int(value * 140)
+                    want_degs = int(value * cls.FULL_SIDE_STEER)
                     if cls.steering_degs == want_degs:
                         continue
                     elif want_degs > cls.steering_degs:
@@ -64,16 +65,21 @@ class BrickController():
                         degs = abs(want_degs - cls.steering_degs)
                     logging.info('{} to {}'.format(degs, ('left', 'right')[tacho > 0]))
                     try:
-                        cls.steering_motor.weak_turn(tacho, degs)
+                        cls.steering_motor.turn(tacho, degs, False)
                         cls.steering_degs = want_degs
                     except BlockedException:
                         logging.warning('Steering motor blocked!')
                     print(cls.steering_motor._get_state().to_list())
                 if key in (cls.REVERSE_KEY, cls.TROTTLE_KEY):
-                    if commands[cls.REVERSE_KEY] == 0:
-                       	cls.main_motor.run(int(commands[cls.TROTTLE_KEY]*127/100.0))
+                    trottle = int(commands[cls.TROTTLE_KEY]*127/100.0)
+                    if trottle == 0:
+                        cls.main_motor.brake()
+                    elif commands[cls.REVERSE_KEY] == 0:
+                       	cls.main_motor.run(trottle)
+                    elif commands[cls.REVERSE_KEY] == 1:
+                       	cls.main_motor.run(-trottle)
                     else:
-                       	cls.main_motor.run(int(-commands[cls.TROTTLE_KEY]*127/100.0))
+                        logging.danger('Unknown trottle value.')
             else:
                 #same as last
                 print('{} same'.format(key, value))

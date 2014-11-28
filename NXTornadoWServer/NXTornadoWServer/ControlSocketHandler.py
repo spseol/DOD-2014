@@ -10,11 +10,12 @@ from BrickController import BrickController
 
 class ControlSocketHandler(WebSocketHandler):
     clients = []
-    n = 0
     def open(self):
+        self.messages = []
         if self not in self.clients:
             self.clients.append(self)
-        logging.info('New WS opening, {} sockets active.'.format(len(self.clients)))
+        logging.info('New WS from {} opened ({} sockets active).'
+            .format(self.request.remote_ip, len(self.clients)))
         if not BrickController.brick_found:
             s = BrickController.init_brick()
             for cl in self.clients:
@@ -23,16 +24,17 @@ class ControlSocketHandler(WebSocketHandler):
     def on_close(self):
         if self in self.clients:
             self.clients.remove(self)
-        logging.info('WS closed, {} sockets active.'.format(len(self.clients)))
+        logging.info('WS from {} closed ({} sockets remaining).'
+            .format(self.request.remote_ip, len(self.clients)))
 
     def on_message(self, message):
-	ControlSocketHandler.n += 1
-	try:
+        self.messages.append(message)
+        try:
             msg_dict = json_decode(message)
         except:
             self.write_message('Are you fucking kidding me?')
             return
-	print(self.request.remote_ip, ControlSocketHandler.n)
-        # logging.info('Received message:\n{}'.format(msg_dict))
+        logging.info('Received {}. message from {}:\n{}'
+            .format(len(self.messages), self.request.remote_ip, msg_dict))
         BrickController.process(**msg_dict)
 

@@ -37,7 +37,6 @@ $(function() {
     var ws = new WebSocket('ws://' + window.location.host + '/ws/control');
     var $number = $('input[type=number]');
     var $button = $('submit#turn');
-	var lastMsg = "";
     var keys = {
             left: 37,
             up: 38,
@@ -53,57 +52,54 @@ $(function() {
             "32": false
 	};
 	var generateStatusJSON = function() {
-		console.log(keysActive);
 		var obj = {
-			"steering":0,
-			"trottle":0,
-			"reverse":0
+			"steering": steering/100.0,
+			"trottle": 0,
+			"reverse": 0
 			};
-		if (keysActive[keys.right]) {
-			obj["steering"] = 0.5;
-		} else if (keysActive[keys.left]) {
-			obj["steering"] = -0.5;
-		} else if (keysActive[keys.left] && (keysActive[keys.right])) {
-			obj["steering"] = 0;
-		} else if (keysActive[keys.down]) {
+        if (keysActive[keys.down] == true) {
 			obj["trottle"] = 100;
 			obj["reverse"] = 1;
-		} else if (keysActive[keys.up]) {
+		};
+        if (keysActive[keys.up] == true) {
 			obj["trottle"] = 100;
 			obj["reverse"] = 0;
-		} else if (keysActive[keys.stop]) {
-			obj = {
-				"steering":0,
-				"trottle":0,
-				"reverse":0
-			}
-		}
+		};
 		return obj
 	};
+    var lastObj = generateStatusJSON();
     var refreshRobot = function() {
         var obj = generateStatusJSON();
 		var msg = JSON.stringify(obj);
-		if (msg == lastMsg) {
-			return
-		} else {
-			lastMsg = msg;
-			console.log(obj);
-			ws.send(msg);
-		};
+        if (Math.abs(obj["steering"]-lastObj["steering"]) <= 0.05) {
+            return
+        }
+		lastObj = obj;
+		ws.send(msg);
     };
-	var keyDown = function(e) {
-		keysActive[e.keyCode] = true;
-		refreshRobot();
-	};
-	var keyUp = function(e) {
-		keysActive[e.keyCode] = false;
-		refreshRobot();
-	};
-    $(window).keydown(keyDown).keyup(keyUp);
-
-    $form.find('button').click(function(event) {
-        arrowKeyDown({keyCode: $(this).data('key')*1});
+    $('html').on('keydown keyup keypress', function(e) {
+        if (e.type == 'keydown' || e.type == 'keypress') {
+            keysActive[e.keyCode] = true;
+        } else {
+            keysActive[e.keyCode] = false;
+        }
+        e.preventDefault();
+        refreshRobot();
     });
+    var steering = 0; // <-100;+100>
+    setInterval(function() {
+        if (keysActive[keys.left] && !keysActive[keys.right]) {
+            steering += (steering > -100) ? -10 : 0;
+        } else if (keysActive[keys.right] && !keysActive[keys.left]) {
+            steering += (steering < 100) ? 10 : 0;
+        } else {
+            if (Math.abs(steering) <= 110) {
+                steering += (steering > 0) ? -10 : ((steering == 0) ? 0 : 10);
+            }
+        }
+        $('#steering').text(steering);
+        refreshRobot();
+    }, 150);
 
     toggleState(brickOK, $brickTitleOK, $brickTitleKO, $cover);
     ws.onmessage = function (evt) {
