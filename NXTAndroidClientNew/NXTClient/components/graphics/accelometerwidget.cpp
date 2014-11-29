@@ -1,4 +1,5 @@
 #include "accelometerwidget.h"
+#include <QFontDatabase>
 
 AccelometerWidget::AccelometerWidget(QQuickItem *parent) :
     QQuickPaintedItem(parent)
@@ -28,10 +29,10 @@ void AccelometerWidget::paint(QPainter *painter)
     //draw arrow
     //set triangle path
     QPainterPath path;
-    path.moveTo(p_arrowWidth / 2, 0);
+    path.moveTo(p_arrowWidth / 2, boundHeight / 4.5);
     path.lineTo(0, boundHeight /2 - p_edgeWidth * 0.75);
-    path.lineTo(- p_arrowWidth / 2, 0);
-    path.lineTo( - p_arrowWidth / 2, 0);
+    path.lineTo(- p_arrowWidth / 2, boundHeight / 4.5);
+    path.lineTo( - p_arrowWidth / 2, boundHeight / 4.5);
 
     //set painter
     painter->setPen(QPen(p_arrowColor));
@@ -41,12 +42,16 @@ void AccelometerWidget::paint(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing);
     painter->drawPath(path);
 
+    //load font
+    int id = QFontDatabase::addApplicationFont("C:/Users/Sony/Documents/DOD/NXTAndroidClientNew/NXTClient/resources/fonts/DIN.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+
     //draw text
     painter->resetTransform();
-    painter->setFont(QFont("Arial Narrow", boundHeight / 3.5, QFont::Black));
+    painter->setFont(QFont(family, boundHeight / 5, QFont::Black));
     painter->setPen(QPen(QColor("white")));
     painter->setBrush(QBrush(QColor("white")));
-    painter->setRenderHint(QPainter::TextAntialiasing);
+    painter->setRenderHint(QPainter::Antialiasing);
     painter->drawText(boundingRect(), Qt::AlignCenter, QString::number(p_angle).append("°"));
 }
 
