@@ -24,8 +24,10 @@ void GradientWidget::paint(QPainter *painter)
 
     QLinearGradient gradient(start, stop);
 
-    gradient.setColorAt(0, QColor(p_colors[0]));
-    gradient.setColorAt(1, QColor(p_colors[1]));
+    gradient.setColorAt(1, QColor(p_colors[0]));
+    gradient.setColorAt(0.499999, QColor(p_colors[0]));
+    gradient.setColorAt(0.5, QColor(p_colors[1]));
+
     painter->fillRect(boundingRect(), gradient);
 }
 

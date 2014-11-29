@@ -2,11 +2,27 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import Qt.WebSockets 1.0
 import QtSensors 5.0 as Sensors
+import GradientWidget 1.0
 
 ApplicationWindow {
     visible: true
     width: 640
     height: 480
+
+
+    //-------------START STOP-------------
+    GradientWidget {
+        width: 400
+        height: 400
+        startPoint: GradientWidget.TopRightCorner
+        colors: ["red", "lime"]
+    }
+
+    GradientWidget {
+
+    }
+
+    //------------------------------------
 
     //------------DATA TRANSFER-----------
     WebSocket {
