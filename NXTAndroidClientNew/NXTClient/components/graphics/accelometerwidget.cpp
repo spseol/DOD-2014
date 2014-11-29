@@ -46,6 +46,7 @@ void AccelometerWidget::paint(QPainter *painter)
     painter->setFont(QFont("Arial Narrow", boundHeight / 3.5, QFont::Black));
     painter->setPen(QPen(QColor("white")));
     painter->setBrush(QBrush(QColor("white")));
+    painter->setRenderHint(QPainter::TextAntialiasing);
     painter->drawText(boundingRect(), Qt::AlignCenter, QString::number(p_angle).append("°"));
 }
 

@@ -12,6 +12,11 @@ ApplicationWindow {
     width: 640
     height: 480
 
+    Item {
+        id: filler
+        anchors.fill: parent
+    }
+
     //-------------START STOP-------------
     GradientWidget {
         id: goWidget
@@ -38,15 +43,16 @@ ApplicationWindow {
     //------------------------------------
 
     AccelometerWidget {
-        x: 100
-        width: 400
-        height: 400
-        edgeColor: "lime"
-        color: "green"
-        arrowColor: "orange"
-        arrowWidth: 20
-        edgeWidth: 20
-        angle: 45
+        width: root.width * 0.35
+        height: width
+        edgeColor: "#393939"
+        color: "#181818"
+        arrowColor: "#E09E01"
+        arrowWidth: width * 0.1
+        edgeWidth: width * 0.1
+        angle: Math.abs(accelometer.angle)
+
+        anchors.centerIn: filler
     }
 
     //------------DATA TRANSFER-----------
