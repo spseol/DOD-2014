@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>resources/fonts/DIN.ttf</file>
+        <file>qml.qrc</file>
+        <file>resources/images/black_arrow.svg</file>
+        <file>resources/images/white_arrow.svg</file>
     </qresource>
 </RCC>

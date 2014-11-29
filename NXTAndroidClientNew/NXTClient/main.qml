@@ -29,6 +29,30 @@ ApplicationWindow {
         startPoint: GradientWidget.TopRightCorner
         colors: ["#00C538", "#00E054"]
 
+        Image {
+            source: "resources/images/black_arrow.svg"
+
+            width: goWidget.width / 7
+            height: width
+
+            sourceSize.width: goWidget.width / 7
+            sourceSize.height: goWidget.height /7
+
+            anchors.bottom: goText.top
+            anchors.horizontalCenter: goText.horizontalCenter
+        }
+
+        Text {
+            id: goText
+
+            text: "GO"
+
+            y: goWidget.height / 2 - goText.height / 2
+            x: goWidget.width / 2 - goText.width / 2
+
+            font.pixelSize: goWidget.height / 3
+            font.family: startstopFont.name
+        }
     }
 
     GradientWidget {
@@ -44,6 +68,7 @@ ApplicationWindow {
     }
     //------------------------------------
 
+    //----------------SPEED---------------
     SliderWidget {
         id: speedSlider
 
@@ -56,10 +81,6 @@ ApplicationWindow {
         data: 0
 
         anchors.right: filler.right
-
-        Behavior on data {
-            NumberAnimation { duration: 2000 }
-        }
     }
 
     MouseArea {
@@ -68,19 +89,24 @@ ApplicationWindow {
         onPressed: speedSlider.handleMousePressed(mouse.y)
         onMouseYChanged: speedSlider.handleMouseMove(mouse.y, pressed)
     }
+    //------------------------------------
 
+    //--------------"COMPASS"-------------
     AccelometerWidget {
         width: root.width * 0.35
         height: width
+
         edgeColor: "#393939"
         color: "#181818"
         arrowColor: "#E09E01"
         arrowWidth: width * 0.1
         edgeWidth: width * 0.1
-        angle: Math.abs(accelometer.angle)
+
+        angle: -accelometer.angle.toFixed(0)
 
         anchors.centerIn: filler
     }
+    //------------------------------------
 
     //------------DATA TRANSFER-----------
     WebSocket {
@@ -153,10 +179,17 @@ ApplicationWindow {
             value = (value * 9 <= -accelometer.lock) ?(-accelometer.lock) / 9: value
             accelometer.angle = value * 9
 
-            if(raw_value + accelometer.tolerance <= accelometer.previous || raw_value - accelometer.tolerance >= accelometer.previous) {
+            if(value + accelometer.tolerance <= accelometer.previous || value - accelometer.tolerance >= accelometer.previous) {
                 accelometer.previous = value
             }
         }
+    }
+    //------------------------------------
+
+    //--------------RESOURCES-------------
+    FontLoader {
+        id: startstopFont
+        source: "resources/fonts/DIN.ttf"
     }
     //------------------------------------
 }
