@@ -2,8 +2,10 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import Qt.WebSockets 1.0
 import QtSensors 5.0 as Sensors
+
 import GradientWidget 1.0
 import AccelometerWidget 1.0
+import SliderWidget 1.0
 
 ApplicationWindow {
     id: root
@@ -41,6 +43,31 @@ ApplicationWindow {
         anchors.top: goWidget.bottom
     }
     //------------------------------------
+
+    SliderWidget {
+        id: speedSlider
+
+        width: root.width * 0.375
+        height: root.height
+
+        activeColor: ["#00D2C2", "#00B2A4"]
+        backgroundColor: "white"
+
+        data: 0
+
+        anchors.right: filler.right
+
+        Behavior on data {
+            NumberAnimation { duration: 2000 }
+        }
+    }
+
+    MouseArea {
+        anchors.fill: speedSlider
+
+        onPressed: speedSlider.handleMousePressed(mouse.y)
+        onMouseYChanged: speedSlider.handleMouseMove(mouse.y, pressed)
+    }
 
     AccelometerWidget {
         width: root.width * 0.35
