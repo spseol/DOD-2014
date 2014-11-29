@@ -3,6 +3,7 @@ import QtQuick.Controls 1.2
 import Qt.WebSockets 1.0
 import QtSensors 5.0 as Sensors
 import GradientWidget 1.0
+import AccelometerWidget 1.0
 
 ApplicationWindow {
     id: root
@@ -35,6 +36,18 @@ ApplicationWindow {
         anchors.top: goWidget.bottom
     }
     //------------------------------------
+
+    AccelometerWidget {
+        x: 100
+        width: 400
+        height: 400
+        edgeColor: "lime"
+        color: "green"
+        arrowColor: "orange"
+        arrowWidth: 20
+        edgeWidth: 20
+        angle: 45
+    }
 
     //------------DATA TRANSFER-----------
     WebSocket {
