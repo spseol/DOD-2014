@@ -5,23 +5,35 @@ import QtSensors 5.0 as Sensors
 import GradientWidget 1.0
 
 ApplicationWindow {
+    id: root
+
     visible: true
     width: 640
     height: 480
 
-
     //-------------START STOP-------------
     GradientWidget {
-        width: 400
-        height: 400
+        id: goWidget
+
+        width: root.width * 0.375
+        height: root.height * 0.5
+
         startPoint: GradientWidget.TopRightCorner
-        colors: ["red", "lime"]
+        colors: ["#00C538", "#00E054"]
+
     }
 
     GradientWidget {
+        id: stopWidget
 
+        width: goWidget.width
+        height: goWidget.height
+
+        startPoint: GradientWidget.TopLeftCorner
+        colors: ["#C40001", "#EF0039"]
+
+        anchors.top: goWidget.bottom
     }
-
     //------------------------------------
 
     //------------DATA TRANSFER-----------
