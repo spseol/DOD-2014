@@ -1,21 +1,3 @@
-function getLogger() {
-    var ws = new WebSocket('ws://' + window.location.host + '/ws/logger');
-    var $logger = $('#logger');
-    var log = function(content, level, created, type) {
-        if (!(created instanceof Date)) {
-            var created = new Date(created*1000);
-        }
-        var $time = $('<span></span>').text(created.toLocaleString()).addClass('pull-right').attr('title', type);
-        $('<div></div>').prependTo($logger).hide().addClass('text-' + level).html(content).append($time).slideDown(200).data('type', type);
-    };
-
-    ws.onmessage = function (evt) {
-        var msg = $.parseJSON(evt.data);
-        log(msg.content.replace('\n', '<br>'), msg.level, msg.created, 'control-msg');
-    };
-    return log;
-};
-
 function toggleState(enable, $brickTitleOK, $brickTitleKO, $cover) {
     if (enable) {
         $brickTitleKO.fadeOut(500);
@@ -29,11 +11,12 @@ function toggleState(enable, $brickTitleOK, $brickTitleKO, $cover) {
 };
 
 $(function() {
+    ServerLogger.init($('#logger'));
+    var log = ServerLogger.log;
     var $brickTitleOK = $('#brick-ok');
     var $brickTitleKO = $('#brick-ko');
     var $cover = $('#cover');
     var $form = $('#action-form');
-    var log = getLogger();
     var ws = new WebSocket('ws://' + window.location.host + '/ws/control');
     var $number = $('input[type=number]');
     var $button = $('submit#turn');
