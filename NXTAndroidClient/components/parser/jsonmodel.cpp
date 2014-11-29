@@ -1,4 +1,5 @@
 #include "jsonmodel.h"
+#include <QDebug>
 
 JSONModel::JSONModel(QObject *parent) :
     QObject(parent)
@@ -8,10 +9,19 @@ JSONModel::JSONModel(QObject *parent) :
 
 void JSONModel::clearData()
 {
-    p_data = "{ ";
+    p_data = "{";
 }
 
 void JSONModel::addVariable(const QString name, int value)
+{
+    p_data.append("\"");
+    p_data.append(name);
+    p_data.append("\":");
+    p_data.append(QString::number(value));
+    p_data.append(",");
+}
+
+void JSONModel::addRVariable(const QString name, qreal value)
 {
     p_data.append("\"");
     p_data.append(name);
@@ -31,7 +41,7 @@ void JSONModel::setData(QString &value)
 
 QString JSONModel::data() {
     QString result = p_data.remove(p_data.length() - 1, 1);
-    result.append(" }");
-
+    result.append("}");
+    qDebug() << result;
     return result;
 }

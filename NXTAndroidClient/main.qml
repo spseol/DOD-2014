@@ -18,12 +18,32 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    JSONModel {
+        id: json
+    }
+
     //------------DATA TRANSFER-----------
     WebSocket {
         id: socket
 
-        active: false
-        url: "ws://192.168.2.104:8888/ws/control"
+        property bool openR: false
+
+        active: true
+        url: "ws://192.168.43.212:8888/ws/control"
+
+        onTextMessageReceived: console.log(message)
+
+        function sendData() {
+            if(!socket.active || !socket.openR)
+                return;
+
+            json.clearData()
+            json.addRVariable("steering", (-accelometer.angle / 90).toFixed(1))
+            json.addVariable("trottle", (goWidget.run) ?100 :0)
+            json.addVariable("reverse", goWidget.reverse)
+            socket.sendTextMessage(json.data)
+        }
+
 
         onStatusChanged: {
             var actualStatus = socket.status
@@ -34,6 +54,7 @@ ApplicationWindow {
                     break;
 
                 case WebSocket.Open:
+                    socket.openR = true
                     console.log("Open");
                     break;
 
@@ -42,6 +63,7 @@ ApplicationWindow {
                     break;
 
                 case WebSocket.Closed:
+                    //socket.openR = false
                     console.log("Closed")
                     break;
 
@@ -106,11 +128,32 @@ ApplicationWindow {
     Rectangle {
         id: goWidget
 
+        property int reverse: 0
+        property int run: 0
+
         width: filler.width * (5.0 / 13.0)
         height: filler.height
         color: "red"
 
         anchors.right: filler.right
+
+        onRunChanged: socket.sendData()
+        onReverseChanged: socket.sendData()
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if(mouse.y >= goWidget.height / 2) {
+                    goWidget.reverse = 1
+                }
+
+                else
+                    goWidget.reverse = 0
+            }
+
+            onPressed: goWidget.run = 1
+            onReleased: goWidget.run = 0
+        }
 
         Text {
             text: qsTr("GO")
@@ -143,8 +186,9 @@ ApplicationWindow {
 
         placeholderText: "Zadejte IP"
         onAccepted: {
-            socket.url = "ws://" + inputID.text + "/ws/control"
-            socket.active = true
+            //socket.url = "ws://" + inputID.text + "/ws/control"
+            //socket.active = true
+            console.log("------------------------------------------------------------")
             console.log(socket.url)
             inputID.visible = false
         }
@@ -153,10 +197,11 @@ ApplicationWindow {
     Sensors.Accelerometer {
         id: accelometer
 
-        property real tolerance: 0.3
+        property real tolerance: 0.05
         property real lock: (Math.atan(filler.height / filler.width) / Math.PI) * 180
         property int previous: 11
         property real angle
+
 
         Behavior on angle {
             NumberAnimation { duration: 300 }
@@ -164,6 +209,8 @@ ApplicationWindow {
 
         active: true
         dataRate: 10000
+
+        //onAngleChanged: socket.sendData()
 
         onReadingChanged: {
             var value = -(accelometer.reading.y)
@@ -184,8 +231,10 @@ ApplicationWindow {
             mask.rotation = 9 * value
             accelometer.angle = raw_value * 9
 
-            if(raw_value + accelometer.tolerance <= accelometer.previous || raw_value - accelometer.tolerance >= accelometer.previous) {
+            if(raw_value + accelometer.tolerance <= accelometer.previous || raw_value - accelometer.tolerance >= accelometer.previous ) {
+                //console.log(accelometer.previous - raw_value)
                 accelometer.previous = raw_value
+                socket.sendData();
             }
         }
     }
