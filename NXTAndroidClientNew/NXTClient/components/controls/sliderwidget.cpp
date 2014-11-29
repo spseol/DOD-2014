@@ -37,6 +37,10 @@ void SliderWidget::paint(QPainter *painter)
     painter->drawRect(boundingRect().x(), boundingRect().y() + (1.0 - p_data) * boundingRect().height(), boundingRect().width(), p_data * boundingRect().height());
 }
 
+/*-------------------------------------*/
+/*---------------SETTERS---------------*/
+/*-------------------------------------*/
+
 void SliderWidget::setActiveColor(QColor &value)
 {
     if(p_activeColor != value)
@@ -63,6 +67,10 @@ void SliderWidget::setData(qreal &value)
         emit dataChanged();
     }
 }
+
+/*-------------------------------------*/
+/*---------------GETTERS---------------*/
+/*-------------------------------------*/
 
 QColor SliderWidget::activeColor() const
 {

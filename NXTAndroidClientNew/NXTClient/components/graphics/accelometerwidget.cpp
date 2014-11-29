@@ -10,6 +10,10 @@ void AccelometerWidget::paint(QPainter *painter)
 
 }
 
+/*-------------------------------------*/
+/*---------------SETTERS---------------*/
+/*-------------------------------------*/
+
 void AccelometerWidget::setAngle(qreal &value)
 {
     if(p_angle != value)
@@ -45,6 +49,10 @@ void AccelometerWidget::setArrowColor(QColor &value)
         emit arrowColorChanged();
     }
 }
+
+/*-------------------------------------*/
+/*---------------GETTERS---------------*/
+/*-------------------------------------*/
 
 qreal AccelometerWidget::angle() const
 {

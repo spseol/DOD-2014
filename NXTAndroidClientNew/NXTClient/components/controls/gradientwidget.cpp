@@ -31,6 +31,10 @@ void GradientWidget::paint(QPainter *painter)
     painter->fillRect(boundingRect(), gradient);
 }
 
+/*-------------------------------------*/
+/*---------------SETTERS---------------*/
+/*-------------------------------------*/
+
 void GradientWidget::setStartPoint(int &value)
 {
     if(p_startPoint != value)
@@ -48,6 +52,10 @@ void GradientWidget::setColors(QStringList &value)
         emit colorsChanged();
     }
 }
+
+/*-------------------------------------*/
+/*---------------GETTERS---------------*/
+/*-------------------------------------*/
 
 int GradientWidget::startPoint() const
 {
