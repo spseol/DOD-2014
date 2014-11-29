@@ -8,12 +8,12 @@ class SliderWidget : public QQuickPaintedItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QColor activeColor READ activeColor WRITE setActiveColor NOTIFY activeColorChanged)
+    Q_PROPERTY(QStringList activeColor READ activeColor WRITE setActiveColor NOTIFY activeColorChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(qreal data READ data WRITE setData NOTIFY dataChanged)
 
     private:
-        QColor p_activeColor;
+        QStringList p_activeColor;
         QColor p_backgroundColor;
         qreal p_data;
 
@@ -25,11 +25,11 @@ class SliderWidget : public QQuickPaintedItem
         virtual void paint(QPainter *painter);
 
         /*---Setters and getters---*/
-        void setActiveColor(QColor& value);
+        void setActiveColor(QStringList& value);
         void setBackgroundColor(QColor& value);
         void setData(qreal& value);
 
-        QColor activeColor() const;
+        QStringList activeColor() const;
         QColor backgroundColor() const;
         qreal data()const;
         /*-------------------------*/

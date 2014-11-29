@@ -26,22 +26,46 @@ void SliderWidget::handleMouseMove(int y, bool pressed)
 
 void SliderWidget::paint(QPainter *painter)
 {
+    const int boundX = boundingRect().x();
+    const int boundY = boundingRect().y();
+    const int boundWidth = boundingRect().width();
+    const int boundHeight = boundingRect().height();
+    const int triangleHeight = boundHeight * 0.2;
+
     painter->setRenderHint(QPainter::HighQualityAntialiasing);
 
     painter->setPen(QPen(p_backgroundColor));
     painter->setBrush(QBrush(p_backgroundColor));
     painter->drawRect(boundingRect());
 
-    painter->setPen(QPen(p_activeColor));
-    painter->setBrush(QBrush(p_activeColor));
-    painter->drawRect(boundingRect().x(), boundingRect().y() + (1.0 - p_data) * boundingRect().height(), boundingRect().width(), p_data * boundingRect().height());
+    //draw bar
+    QRectF active(boundX, boundY + (1.0 - p_data) * boundHeight + triangleHeight, boundWidth, p_data * boundHeight - triangleHeight);
+
+    QLinearGradient gradient(active.topLeft(), active.bottomLeft());
+
+    gradient.setColorAt(0, QColor(p_activeColor[0]));
+    gradient.setColorAt(1, QColor(p_activeColor[1]));
+
+    painter->fillRect(active, gradient);
+
+    //draw triangle
+    QPainterPath path;
+    path.moveTo(active.topLeft());
+    path.lineTo(boundingRect().center().x(), active.y() - triangleHeight);
+    path.lineTo(active.topRight());
+    path.lineTo(active.topLeft());
+
+    painter->setBrush(QBrush(QColor(p_activeColor[0])));
+    painter->setPen(QPen(QColor(p_activeColor[0])));
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->drawPath(path);
 }
 
 /*-------------------------------------*/
 /*---------------SETTERS---------------*/
 /*-------------------------------------*/
 
-void SliderWidget::setActiveColor(QColor &value)
+void SliderWidget::setActiveColor(QStringList &value)
 {
     if(p_activeColor != value)
     {
@@ -72,7 +96,7 @@ void SliderWidget::setData(qreal &value)
 /*---------------GETTERS---------------*/
 /*-------------------------------------*/
 
-QColor SliderWidget::activeColor() const
+QStringList SliderWidget::activeColor() const
 {
     return p_activeColor;
 }
