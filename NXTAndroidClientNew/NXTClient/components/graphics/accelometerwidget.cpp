@@ -43,13 +43,7 @@ void AccelometerWidget::paint(QPainter *painter)
 
     //draw text
     painter->resetTransform();
-
-    QFont font = painter->font();
-    font.setPixelSize(boundHeight / 3);
-    //font.setFamily("Roboto");
-    font.setBold(true);
     painter->setFont(QFont("Arial Narrow", boundHeight / 3.5, QFont::Black));
-
     painter->setPen(QPen(QColor("white")));
     painter->setBrush(QBrush(QColor("white")));
     painter->drawText(boundingRect(), Qt::AlignCenter, QString::number(p_angle).append("°"));
