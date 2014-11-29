@@ -61,3 +61,8 @@ int GradientWidget::startPoint() const
 {
     return p_startPoint;
 }
+
+QStringList GradientWidget::colors() const
+{
+    return p_colors;
+}

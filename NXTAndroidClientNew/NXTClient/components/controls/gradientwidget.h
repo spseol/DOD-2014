@@ -10,7 +10,7 @@ class GradientWidget : public QQuickPaintedItem
 
     Q_ENUMS(point)
     Q_PROPERTY(int startPoint READ startPoint WRITE setStartPoint NOTIFY startPointChanged)
-    Q_PROPERTY(QStringList colors WRITE setColors NOTIFY colorsChanged)
+    Q_PROPERTY(QStringList colors READ colors WRITE setColors NOTIFY colorsChanged)
 
     private:
         int p_startPoint;
@@ -28,6 +28,7 @@ class GradientWidget : public QQuickPaintedItem
         void setColors(QStringList& value);
 
         int startPoint() const;
+        QStringList colors() const;
         /*-------------------------*/
 
     signals:
