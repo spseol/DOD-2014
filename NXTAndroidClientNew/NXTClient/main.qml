@@ -5,6 +5,7 @@ import QtSensors 5.0 as Sensors
 import QtGraphicalEffects 1.0
 
 import AccelometerWidget 1.0
+import JSONParser 1.0
 import "components/qml" as Panels
 
 ApplicationWindow {
@@ -69,6 +70,8 @@ ApplicationWindow {
     WebSocket {
         id: socket
 
+        signal dataChanged()
+
         active: false
         url: "ws://192.168.2.104:8888/ws/control"
 
@@ -102,6 +105,19 @@ ApplicationWindow {
                     break;
             }
         }
+
+        function sendData() {
+            if(!socket.active || !socket.status == WebSocket.Open)
+                return;
+
+            json.clearData()
+            json.addRVariable("steering", (-accelometer.angle / 90).toFixed(1))
+            json.addVariable("trottle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
+            json.addVariable("reverse", buttonPanel.reverse)
+            socket.sendTextMessage(json.data)
+        }
+
+        onDataChanged: socket.sendData()
     }
 
     //IP INPUT
@@ -115,6 +131,13 @@ ApplicationWindow {
             console.log(socket.url)
             inputID.visible = false
         }
+    }
+
+    //------------------------------------
+
+    //----------------JSON----------------
+    JSONParser {
+        id: parser
     }
 
     //------------------------------------
@@ -136,7 +159,7 @@ ApplicationWindow {
         dataRate: 10000
 
         onReadingChanged: {
-            var value = -(accelometer.reading.y)
+            var value = -accelometer.reading.y
 
             value = (value *9 >= accelometer.lock) ? accelometer.lock / 9 :value
             value = (value * 9 <= -accelometer.lock) ?(-accelometer.lock) / 9: value
@@ -144,6 +167,7 @@ ApplicationWindow {
 
             if(value + accelometer.tolerance <= accelometer.previous || value - accelometer.tolerance >= accelometer.previous) {
                 accelometer.previous = value
+                socket.dataChanged()
             }
         }
     }
