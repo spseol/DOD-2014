@@ -107,15 +107,15 @@ ApplicationWindow {
         }
 
         function sendData() {
-            if(!socket.active || !socket.status == WebSocket.Open)
-                return;
+            //if(!socket.active || !socket.status == WebSocket.Open)
+                //return;
 
             parser.clearData()
             parser.addVariable("steering", ((-accelometer.angle / 90) * 90 / accelometer.lock).toFixed(2))
             parser.addVariable("trottle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
             parser.addVariable("reverse", buttonPanel.reverse)
-            socket.sendTextMessage(parser.data)
-            console.log(parser.data)
+            //socket.sendTextMessage(parser.data)
+            //console.log(parser.data)
         }
 
         onDataChanged: socket.sendData()
@@ -140,8 +140,33 @@ ApplicationWindow {
     JSONParser {
         id: parser
     }
-
     //------------------------------------
+
+    MultiPointTouchArea {
+        id: touchArea
+
+       anchors.fill: filler
+        maximumTouchPoints: 5
+
+        onPressed: {
+            for(var key in touchPoints) {
+                var point = touchPoints[key]
+
+                sliderPanel.slider.handleTouch(point.x, point.y)
+            }
+        }
+
+        onTouchUpdated: {
+            for(var key in touchPoints) {
+                var point = touchPoints[key]
+                //console.log(key)
+
+                if(point.pressed) {
+                    sliderPanel.slider.handleTouch(point.x, point.y)
+                }
+            }
+        }
+    }
 
     //-------------ACCELOMETER------------
     Sensors.Accelerometer {
