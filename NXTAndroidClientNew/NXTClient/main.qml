@@ -4,9 +4,7 @@ import Qt.WebSockets 1.0
 import QtSensors 5.0 as Sensors
 import QtGraphicalEffects 1.0
 
-import GradientWidget 1.0
 import AccelometerWidget 1.0
-import SliderWidget 1.0
 import "components/qml" as Panels
 
 ApplicationWindow {

@@ -14,8 +14,6 @@ Item {
         backgroundColor: "white"
 
         data: 0.5
-
-        anchors.right: filler.right
     }
 
     MouseArea {
