@@ -48,8 +48,8 @@ ApplicationWindow {
 
     //--------------"COMPASS"-------------
     AccelometerWidget {
-        width: root.width * 0.35
-        height: width
+        width: height
+        height: root.height * 0.56
 
         edgeColor: "#393939"
         color: "#181818"
