@@ -36,5 +36,10 @@ class ControlSocketHandler(WebSocketHandler):
             return
         logging.info('Received {}. message from {}:\n{}'
             .format(len(self.messages), self.request.remote_ip, msg_dict))
-        BrickController.process(**msg_dict)
+        try:
+            BrickController.process(**msg_dict)
+        except:
+            BrickController.brick_found = False
+            for cl in self.clients:
+                cl.write_message(BrickController.get_state())
 

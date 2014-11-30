@@ -20,8 +20,6 @@
             <button id="brick-ok" class="btn btn-success btn-lg">OK</button>
             <button id="brick-ko" class="btn btn-danger btn-lg">KO</button>
     </h1>
-
-    <!-- {{ ws_clients }} -->
     <div class="controller block text-center">
         <h2>Robot controller</h2>
         <div id="control-form" class="text-center">
@@ -33,13 +31,7 @@
             <button class="btn text-center btn-success" data-key="40"><i class="icon-large icon-down-arrow"></i></button>
             <button class="btn text-center btn-success" data-key="39"><i class="icon-large icon-right-arrow"></i></button>
             <hr>
-            <div class="trottle-slider">
-                <div class="trottle-cover">
-                    
-                </div>
-            </div>
-            <input type="range" name="trottle" value="80" step="5" min="0" max="100">
-
+            <input class="trottle-slider" type="range" name="trottle" value="90" step="1" min="0" max="100">
         </div>
         <div id="cover" class="cover"><h3 class="text-danger">Something's wrong...</h3></div>
     </div>

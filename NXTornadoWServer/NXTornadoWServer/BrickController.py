@@ -1,5 +1,5 @@
 import logging
-
+from time import sleep
 from nxt.locator import find_one_brick, BrickNotFoundError
 from nxt.motor import Motor, PORT_A, PORT_B, BlockedException
 
@@ -10,16 +10,16 @@ class BrickController():
     brick_searching = False
     steering_motor = None
     actual_steering_degs = 0
-    STEERING_KEY = 'steering'
     main_motor = None
     last_commands = {
         'steering': 0,
         'trottle': 0,
         'reverse': 0,
     }
+    STEERING_KEY = 'steering'
     TROTTLE_KEY = 'trottle'
     REVERSE_KEY = 'reverse'
-    FULL_SIDE_STEER = 1400
+    FULL_SIDE_STEER = 240
 
     @classmethod
     def init_brick(cls):
@@ -46,7 +46,6 @@ class BrickController():
     def init_motors(cls):
         cls.steering_motor = Motor(cls.brick, PORT_A)
         cls.main_motor = Motor(cls.brick, PORT_B)
-        assert isinstance(cls.steering_motor, Motor) and isinstance(cls.main_motor, Motor)
 
     @classmethod
     def process(cls, **commands):
@@ -63,7 +62,6 @@ class BrickController():
 
     @classmethod    
     def set_steering(cls, abs_degs):
-        assert isinstance(cls.steering_motor, Motor)
         if cls.actual_steering_degs == abs_degs:
             logging.warn('Fucks in steering alg.')
             return
@@ -75,7 +73,11 @@ class BrickController():
             degs = abs(abs_degs - cls.actual_steering_degs)
         logging.info('Steer {} degs to {}.'.format(degs, ('left', 'right')[tacho > 0]))
         try:
-            cls.steering_motor.weak_turn(tacho, degs)
+            # cls.steering_motor.turn(tacho, degs, True, emulate=True)
+            # cls.steering_motor.weak_turn(tacho, degs)
+            cls.steering_motor.run(tacho)
+            sleep(degs/850.0)
+            cls.steering_motor.brake()
             cls.actual_steering_degs = abs_degs
         except BlockedException:
             logging.warning('Steering motor blocked!')
@@ -93,7 +95,7 @@ class BrickController():
             cls.main_motor.brake()
             return
         # <0,100> trans to <(0.7*127),127>
-        motor_trottle = int((0.3 + 0.7 * (trottle / 100.0)) * 127)
+        motor_trottle = int((0.5 + 0.5 * (trottle / 100.0)) * 127)
         if not reverse:
             cls.main_motor.run(motor_trottle)
         else:

@@ -26,18 +26,10 @@
 }
 
 .trottle-slider {
-    position: relative;
-    height: 30px;
-    width: 100%;
-    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
     border: 1px solid #BBBBBB;
-    background: #19ff00;
-    background: -moz-linear-gradient(left, #19ff00 0%, #ff0000 100%);
-    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#19ff00), color-stop(100%,#ff0000));
-    background: -webkit-linear-gradient(left, #19ff00 0%,#ff0000 100%);
-    background: -o-linear-gradient(left, #19ff00 0%,#ff0000 100%);
-    background: -ms-linear-gradient(left, #19ff00 0%,#ff0000 100%);
-    background: linear-gradient(to right, #19ff00 0%,#ff0000 100%);
 }
 
 .logger {
