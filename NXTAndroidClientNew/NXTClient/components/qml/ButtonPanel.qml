@@ -2,6 +2,10 @@ import QtQuick 2.0
 import GradientWidget 1.0
 
 Item {
+    id: buttonGroup
+
+    property int reverse: 0
+    property bool pressed: false
     //-------------START STOP-------------
     //GO
     GradientWidget {
@@ -41,6 +45,22 @@ Item {
 
             font.pixelSize: goWidget.height / 3
             font.family: startstopFont.name
+        }
+
+        //HANDLE EVENTS
+        MouseArea {
+            anchors.fill: parent
+
+            onPressed: {
+                buttonGroup.reverse = 0
+                buttonGroup.pressed = true
+                socket.dataChanged()
+            }
+
+            onReleased: {
+                buttonGroup.pressed = false
+                socket.dataChanged()
+            }
         }
     }
 
@@ -86,6 +106,22 @@ Item {
 
             font.pixelSize: stopWidget.height / 3
             font.family: startstopFont.name
+        }
+
+        //HANDLE EVENTS
+        MouseArea {
+            anchors.fill: parent
+
+            onPressed: {
+                buttonGroup.reverse = 1
+                buttonGroup.pressed = true
+                socket.dataChanged()
+            }
+
+            onReleased: {
+                buttonGroup.pressed = false
+                socket.dataChanged()
+            }
         }
     }
     //------------------------------------

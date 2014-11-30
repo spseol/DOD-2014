@@ -14,6 +14,8 @@ Item {
         backgroundColor: "white"
 
         data: 0
+
+        onDataChanged: socket.dataChanged()
     }
 
     //TOP ARROW
