@@ -1,23 +1,25 @@
 #include "sliderwidget.h"
+#include <QtMath>
+#include "../../logic/touchlogic.h"
 
 SliderWidget::SliderWidget(QQuickItem *parent) :
     QQuickPaintedItem(parent)
 {
 }
 
-void SliderWidget::handleMousePressed(int y)
+void SliderWidget::handleTouch(int x, int y)
 {
-    mouseY = y;
-}
+    QObject *parent = this->parent();
+    int absoluteY = y;
 
-void SliderWidget::handleMouseMove(int y, bool pressed)
-{
-    if(!pressed)
+    x -= parent->property("x").toDouble();
+    y -= parent->property("y").toDouble();
+    if(!TouchLogic::isInRect(x, y, boundingRect()))
         return;
 
     qreal boundingHeight = boundingRect().height();
 
-    p_data = (mouseY - y) / boundingHeight + (boundingHeight - mouseY) / boundingHeight;
+    p_data = qFabs(absoluteY / boundingHeight -1);
     p_data = (p_data <= 0.0) ? 0.0 :p_data;
     p_data = (p_data >= 1.0) ? 1.0 :p_data;
 

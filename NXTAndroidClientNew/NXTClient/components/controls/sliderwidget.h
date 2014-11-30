@@ -35,8 +35,7 @@ class SliderWidget : public QQuickPaintedItem
         /*-------------------------*/
 
     public slots:
-        void handleMousePressed(int y);
-        void handleMouseMove(int y, bool pressed);
+        void handleTouch(int x, int y);
 
     signals:
         void activeColorChanged();

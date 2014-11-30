@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.3
 import SliderWidget 1.0
 
 Item {
@@ -50,14 +50,6 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: topArrow.bottom
         anchors.topMargin: height / 4
-    }
-
-    //HANDLE EVENTS
-    MouseArea {
-        anchors.fill: speedSlider
-
-        onPressed: speedSlider.handleMousePressed(mouse.y)
-        onMouseYChanged: speedSlider.handleMouseMove(mouse.y, pressed)
     }
     //------------------------------------
 }
