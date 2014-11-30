@@ -107,14 +107,14 @@ ApplicationWindow {
         }
 
         function sendData() {
-            //if(!socket.active || !socket.status == WebSocket.Open)
-                //return;
+            if(!socket.active || !socket.status == WebSocket.Open)
+                return;
 
             parser.clearData()
             parser.addVariable("steering", ((-accelometer.angle / 90) * 90 / accelometer.lock).toFixed(2))
             parser.addVariable("trottle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
             parser.addVariable("reverse", buttonPanel.reverse)
-            //socket.sendTextMessage(parser.data)
+            socket.sendTextMessage(parser.data)
             //console.log(parser.data)
         }
 
@@ -159,7 +159,6 @@ ApplicationWindow {
         onTouchUpdated: {
             for(var key in touchPoints) {
                 var point = touchPoints[key]
-                //console.log(key)
 
                 if(point.pressed) {
                     sliderPanel.slider.handleTouch(point.x, point.y)

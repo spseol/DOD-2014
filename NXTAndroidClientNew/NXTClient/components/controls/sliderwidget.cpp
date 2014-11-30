@@ -14,6 +14,7 @@ void SliderWidget::handleTouch(int x, int y)
 
     x -= parent->property("x").toDouble();
     y -= parent->property("y").toDouble();
+
     if(!TouchLogic::isInRect(x, y, boundingRect()))
         return;
 
