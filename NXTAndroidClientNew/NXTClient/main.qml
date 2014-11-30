@@ -110,11 +110,12 @@ ApplicationWindow {
             if(!socket.active || !socket.status == WebSocket.Open)
                 return;
 
-            json.clearData()
-            json.addRVariable("steering", (-accelometer.angle / 90).toFixed(1))
-            json.addVariable("trottle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
-            json.addVariable("reverse", buttonPanel.reverse)
-            socket.sendTextMessage(json.data)
+            parser.clearData()
+            parser.addRVariable("steering", (-accelometer.angle / 90).toFixed(1))
+            parser.addVariable("trottle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
+            parser.addVariable("reverse", buttonPanel.reverse)
+            socket.sendTextMessage(parser.data)
+            console.log(parser.data)
         }
 
         onDataChanged: socket.sendData()
