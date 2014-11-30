@@ -55,6 +55,34 @@ Item {
         color: "#171717"
 
         anchors.top: speedInfo.bottom
+
+        Text {
+            id: nameLabel
+
+            y: parent.height / 1.6
+
+            text: "NXT Client"
+            color: "white"
+
+            font.pixelSize: parent.height / 8
+            font.family: helveticaLight.name
+
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Text {
+            id: connetionText
+
+            text: "Disconnected"
+            color: "white"
+
+            font.pixelSize: parent.height / 16
+            font.family: helveticaBlack.name
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: nameLabel.bottom
+            anchors.topMargin: nameLabel.height / 4
+        }
     }
     //-----------------------------------
 }
