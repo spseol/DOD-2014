@@ -58,6 +58,7 @@ RobotController.refreshControlStatus = function() {
 RobotController.refreshSteering = function() {
 	var RC = RobotController;
 	var step = 25;
+	var steering = RC.actualSteering;
     if (RC.activeKeys[RC.keys.left] && !RC.activeKeys[RC.keys.right]) {
         RC.actualSteering += (RC.actualSteering > -100) ? -step : 0;
     } else if (RC.activeKeys[RC.keys.right] && !RC.activeKeys[RC.keys.left]) {
@@ -66,6 +67,9 @@ RobotController.refreshSteering = function() {
         if (Math.abs(RC.actualSteering) <= 110) {
             RC.actualSteering += (RC.actualSteering > 0) ? -step : ((RC.actualSteering == 0) ? 0 : step);
         }
+    }
+    if (RC.actualSteering != steering) {
+    	//RC.refreshControlStatus();
     }
 };
 
@@ -87,6 +91,7 @@ RobotController.onKeyEvent = function(e) {
             RobotController.activeKeys[e.keyCode] = false;
             $('button[data-key=' + e.keyCode + ']').addClass('btn-success').removeClass('btn-danger');
         }
+        RC.refreshControlStatus();
         e.preventDefault();
 };
 
@@ -104,7 +109,7 @@ RobotController.init = function($OK, $KO, $trottle, log) {
 	this.ws.onmessage = function (evt) {
         RobotController.toggleState($.parseJSON(evt.data).brick_found, $OK, $KO);
     };
-    setInterval(this.refreshSteering, 100);
-    setInterval(this.refreshControlStatus, 50);
+    setInterval(this.refreshControlStatus, 200);
+    setInterval(this.refreshSteering, 20);
     this.connectEvents();
 };

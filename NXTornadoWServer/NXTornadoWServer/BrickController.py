@@ -1,10 +1,12 @@
 import logging
 from time import sleep
 from nxt.locator import find_one_brick, BrickNotFoundError
+from nxt.motcont import MotCont
 from nxt.motor import Motor, PORT_A, PORT_B, BlockedException
 
 
 class BrickController():
+    motCont = None
     brick = None
     brick_found = False
     brick_searching = False
@@ -40,12 +42,15 @@ class BrickController():
         cls.brick_searching, cls.brick_found = False, True
         logging.info('Brick successfully found.')
         cls.init_motors()
+        cls.motCont = MotCont(cls.brick)
+        cls.motCont.start()
         return cls.brick_found
 
     @classmethod
     def init_motors(cls):
         cls.steering_motor = Motor(cls.brick, PORT_A)
         cls.main_motor = Motor(cls.brick, PORT_B)
+
 
     @classmethod
     def process(cls, **commands):
@@ -62,25 +67,9 @@ class BrickController():
 
     @classmethod    
     def set_steering(cls, abs_degs):
-        if cls.actual_steering_degs == abs_degs:
-            logging.warn('Fucks in steering alg.')
-            return
-        elif abs_degs > cls.actual_steering_degs:
-            tacho = 100
-            degs = abs_degs - cls.actual_steering_degs
-        elif abs_degs < cls.actual_steering_degs:
-            tacho = -100
-            degs = abs(abs_degs - cls.actual_steering_degs)
-        logging.info('Steer {} degs to {}.'.format(degs, ('left', 'right')[tacho > 0]))
-        try:
-            # cls.steering_motor.turn(tacho, degs, True, emulate=True)
-            # cls.steering_motor.weak_turn(tacho, degs)
-            cls.steering_motor.run(tacho)
-            sleep(degs/850.0)
-            cls.steering_motor.brake()
-            cls.actual_steering_degs = abs_degs
-        except BlockedException:
-            logging.warning('Steering motor blocked!')
+        sleep(0.1)
+        cls.motCont.move_to(PORT_A, 100 if abs_degs > 0 else -100, abs(abs_degs), speedreg=10)
+
     
     @classmethod
     def set_trottle(cls, trottle, reverse):

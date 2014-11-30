@@ -27,6 +27,7 @@ def on_reload():
     if BrickController.brick_found:
         BrickController.brick_found = BrickController.brick_searching = False
         BrickController.brick.sock.close()
+        BrickController.motCont.stop()
 
 
 app = web.Application([
