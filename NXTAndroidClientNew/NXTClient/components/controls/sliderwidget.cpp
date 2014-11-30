@@ -21,6 +21,7 @@ void SliderWidget::handleMouseMove(int y, bool pressed)
     p_data = (p_data <= 0.0) ? 0.0 :p_data;
     p_data = (p_data >= 1.0) ? 1.0 :p_data;
 
+    emit dataChanged();
     this->update();
 }
 
