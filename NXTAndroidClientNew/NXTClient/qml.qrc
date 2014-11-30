@@ -7,5 +7,8 @@
         <file>resources/images/white_arrow.svg</file>
         <file>resources/fonts/HelveticaNeueCE-Black.otf</file>
         <file>resources/fonts/HelveticaNeueCE-UltraLight.otf</file>
+        <file>components/qml/ButtonPanel.qml</file>
+        <file>components/qml/InfoPanel.qml</file>
+        <file>components/qml/SliderPanel.qml</file>
     </qresource>
 </RCC>

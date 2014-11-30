@@ -7,183 +7,44 @@ import QtGraphicalEffects 1.0
 import GradientWidget 1.0
 import AccelometerWidget 1.0
 import SliderWidget 1.0
+import "components/qml" as Panels
 
 ApplicationWindow {
     id: root
 
     visible: true
-    width: 640
+    width: 854
     height: 480
 
     Item {
         id: filler
         anchors.fill: parent
-    }
 
-    //-------------START STOP-------------
-    //GO
-    GradientWidget {
-        id: goWidget
+        Panels.ButtonPanel {
+            id: buttonPanel
 
-        width: root.width * 0.375
-        height: root.height * 0.5
-
-        startPoint: GradientWidget.TopRightCorner
-        colors: ["#00C538", "#00E054"]
-
-        Image {
-            id: blackArrow
-
-            source: "resources/images/black_arrow.svg"
-
-            width: goWidget.width / 7
-            height: width
-
-            sourceSize.width: goWidget.width / 7
-            sourceSize.height: goWidget.height /7
-
-            anchors.bottom: goText.top
-            anchors.bottomMargin: height / 3
-            anchors.horizontalCenter: goText.horizontalCenter
+            width: root.width * 0.375
+            height: root.height
         }
 
-        Text {
-            id: goText
+        Panels.InfoPanel {
+            id: infoPanel
 
-            text: "GO"
+            width: root.width * 0.25
+            height: root.height
 
-            y: (goWidget.height + blackArrow.height) / 2 - goText.height / 2
-            x: goWidget.width / 2 - goText.width / 2
-
-            font.pixelSize: goWidget.height / 3
-            font.family: startstopFont.name
-        }
-    }
-
-    //STOP
-    GradientWidget {
-        id: stopWidget
-
-        width: goWidget.width
-        height: goWidget.height
-
-        startPoint: GradientWidget.TopLeftCorner
-        colors: ["#C40001", "#EF0039"]
-
-        anchors.top: goWidget.bottom
-
-        Image {
-            id: whiteArrow
-
-            source: "resources/images/white_arrow.svg"
-
-            width: stopWidget.width / 7
-            height: width
-            rotation: 180
-
-            sourceSize.width: stopWidget.width / 7
-            sourceSize.height: stopWidget.height /7
-
-            anchors.bottom: stopText.top
-            anchors.bottomMargin: height / 3
-            anchors.horizontalCenter: stopText.horizontalCenter
+            anchors.left: buttonPanel.right
         }
 
-        Text {
-            id: stopText
+        Panels.SliderPanel {
+            id: sliderPanel
 
-            text: "BACK"
-            color: "white"
+            width: root.width * 0.375
+            height: root.height
 
-            y: (stopWidget.height + blackArrow.height) / 2 - stopText.height / 2
-            x: stopWidget.width / 2 - stopText.width / 2
-
-            font.pixelSize: stopWidget.height / 3
-            font.family: startstopFont.name
+            anchors.left: infoPanel.right
         }
     }
-    //------------------------------------
-
-    //---------------INFO----------------
-    LinearGradient {
-        id: angleInfo
-
-        width: root.width * 0.25
-        height: root.height / 2
-
-        anchors.left: stopWidget.right
-
-        start: Qt.point(angleInfo.x + angleInfo.width / 2, angleInfo.y)
-        end: Qt.point(angleInfo.x, angleInfo.y + angleInfo.height - 1)
-
-        gradient: Gradient {
-                    GradientStop { position: 0.0; color: "#2B2B2B" }
-                    GradientStop { position: 1.0; color: "#1D1D1D" }
-        }
-
-        Text {
-            id: speedLabel
-
-            y: angleInfo.height / 5.5
-
-            text: "Speed level"
-            color: "white"
-
-            font.pixelSize: angleInfo.height / 16
-            font.family: helveticaBlack.name
-
-            anchors.horizontalCenter: angleInfo.horizontalCenter
-        }
-
-        Text {
-            id: speedText
-
-            text: (speedSlider.data * 100).toFixed(0) + "%"
-            color: "white"
-
-            font.pixelSize: angleInfo.height / 8
-            font.family: helveticaLight.name
-
-            anchors.horizontalCenter: angleInfo.horizontalCenter
-            anchors.top: speedLabel.bottom
-            anchors.topMargin: speedLabel.height / 2
-        }
-    }
-
-    Rectangle {
-        width: angleInfo.width
-        height: angleInfo.height
-
-        color: "#171717"
-
-        anchors.bottom: filler.bottom
-        anchors.left: stopWidget.right
-    }
-
-    //-----------------------------------
-
-    //----------------SPEED---------------
-    SliderWidget {
-        id: speedSlider
-
-        width: root.width * 0.375
-        height: root.height
-
-        activeColor: ["#00D2C2", "#00B2A4"]
-        backgroundColor: "white"
-
-        data: 0
-
-        anchors.right: filler.right
-    }
-
-    MouseArea {
-        anchors.fill: speedSlider
-
-        onPressed: speedSlider.handleMousePressed(mouse.y)
-        onMouseYChanged: speedSlider.handleMouseMove(mouse.y, pressed)
-    }
-    //------------------------------------
 
     //--------------"COMPASS"-------------
     AccelometerWidget {
