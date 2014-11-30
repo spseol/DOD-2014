@@ -93,7 +93,7 @@ class BrickController():
             cls.main_motor.brake()
             return
         # <0,100> trans to <(0.7*127),127>
-        motor_trottle = int((0.7 + 0.3 * (trottle / 100.0)) * 127)
+        motor_trottle = int((0.3 + 0.7 * (trottle / 100.0)) * 127)
         if not reverse:
             cls.main_motor.run(motor_trottle)
         else:

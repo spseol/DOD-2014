@@ -1,5 +1,5 @@
 var ServerLogger = {
-	ws: {},
+	ws: {send: function(msg) {console.log('WS not inited, msg:'+msg);}},
 	settings: {
 		wsPrefix: 'ws://',
 		wsPostfix: '/ws/logger'

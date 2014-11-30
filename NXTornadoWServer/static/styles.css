@@ -25,6 +25,21 @@
     border-radius: 20px;
 }
 
+.trottle-slider {
+    position: relative;
+    height: 30px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #BBBBBB;
+    background: #19ff00;
+    background: -moz-linear-gradient(left, #19ff00 0%, #ff0000 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#19ff00), color-stop(100%,#ff0000));
+    background: -webkit-linear-gradient(left, #19ff00 0%,#ff0000 100%);
+    background: -o-linear-gradient(left, #19ff00 0%,#ff0000 100%);
+    background: -ms-linear-gradient(left, #19ff00 0%,#ff0000 100%);
+    background: linear-gradient(to right, #19ff00 0%,#ff0000 100%);
+}
+
 .logger {
     padding-top: 20px;
     margin-top: 20px;
@@ -45,7 +60,7 @@
 }
 
 .icon-large {
-    // background-image: url("https://raw.githubusercontent.com/marcoceppi/bootstrap-glyphicons/master/glyphicons.png");
+    background-image: url("/static/glyphicons.png");
     background-position: 24px 24px;
     background-repeat: no-repeat;
     display: inline-block;
