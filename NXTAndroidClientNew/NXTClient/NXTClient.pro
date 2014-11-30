@@ -6,7 +6,8 @@ SOURCES += main.cpp \
     components/parser/jsonparser.cpp \
     components/controls/sliderwidget.cpp \
     components/controls/gradientwidget.cpp \
-    components/graphics/accelometerwidget.cpp
+    components/graphics/accelometerwidget.cpp \
+    logic/touchlogic.cpp
 
 RESOURCES += qml.qrc
 
@@ -26,4 +27,5 @@ HEADERS += \
     components/parser/jsonparser.h \
     components/controls/sliderwidget.h \
     components/controls/gradientwidget.h \
-    components/graphics/accelometerwidget.h
+    components/graphics/accelometerwidget.h \
+    logic/touchlogic.h
