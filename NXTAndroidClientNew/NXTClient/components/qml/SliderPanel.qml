@@ -16,6 +16,7 @@ Item {
         data: 0
     }
 
+    //TOP ARROW
     Image {
         id: topArrow
 
@@ -32,6 +33,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    //BOTTOM ARROW
     Image {
         id: bottomArrow
 
@@ -48,6 +50,7 @@ Item {
         anchors.topMargin: height / 4
     }
 
+    //HANDLE EVENTS
     MouseArea {
         anchors.fill: speedSlider
 

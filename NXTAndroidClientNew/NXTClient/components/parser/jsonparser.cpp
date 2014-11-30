@@ -20,6 +20,10 @@ void JSONParser::addVariable(const QString name, int value)
     p_data.append(",");
 }
 
+/*-------------------------------------*/
+/*---------------SETTERS---------------*/
+/*-------------------------------------*/
+
 void JSONParser::setData(QString &value)
 {
     if(value != p_data)
@@ -28,6 +32,10 @@ void JSONParser::setData(QString &value)
         emit dataChanged();
     }
 }
+
+/*-------------------------------------*/
+/*---------------GETTERS---------------*/
+/*-------------------------------------*/
 
 QString JSONParser::data() {
     QString result = p_data;

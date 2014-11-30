@@ -19,6 +19,7 @@ Item {
                     GradientStop { position: 1.0; color: "#1D1D1D" }
         }
 
+        //SPEED LABEL
         Text {
             id: speedLabel
 
@@ -33,6 +34,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
+        //SPEED VALUE
         Text {
             id: speedText
 
@@ -57,6 +59,7 @@ Item {
 
         anchors.top: speedInfo.bottom
 
+        //APP NAME
         Text {
             id: nameLabel
 
@@ -71,6 +74,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
+        //SOCKET STATUS
         Text {
             id: connetionText
 

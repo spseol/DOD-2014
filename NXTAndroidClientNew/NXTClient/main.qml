@@ -14,10 +14,12 @@ ApplicationWindow {
     width: 854
     height: 480
 
+    //FILLER
     Item {
         id: filler
         anchors.fill: parent
 
+        //BUTTONS
         Panels.ButtonPanel {
             id: buttonPanel
 
@@ -25,6 +27,7 @@ ApplicationWindow {
             height: root.height
         }
 
+        //INFO
         Panels.InfoPanel {
             id: infoPanel
 
@@ -34,6 +37,7 @@ ApplicationWindow {
             anchors.left: buttonPanel.right
         }
 
+        //SLIDER
         Panels.SliderPanel {
             id: sliderPanel
 
@@ -100,6 +104,7 @@ ApplicationWindow {
         }
     }
 
+    //IP INPUT
     TextField {
         id: inputID
 

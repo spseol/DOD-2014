@@ -13,6 +13,7 @@ Item {
         startPoint: GradientWidget.TopRightCorner
         colors: ["#00C538", "#00E054"]
 
+        //ARROW
         Image {
             id: blackArrow
 
@@ -29,6 +30,7 @@ Item {
             anchors.horizontalCenter: goText.horizontalCenter
         }
 
+        //LABEL
         Text {
             id: goText
 
@@ -54,6 +56,7 @@ Item {
 
         anchors.top: goWidget.bottom
 
+        //ARROW
         Image {
             id: whiteArrow
 
@@ -71,6 +74,7 @@ Item {
             anchors.horizontalCenter: stopText.horizontalCenter
         }
 
+        //LABEL
         Text {
             id: stopText
 
