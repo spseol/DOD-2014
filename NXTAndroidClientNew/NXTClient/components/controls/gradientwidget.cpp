@@ -1,4 +1,5 @@
 #include "gradientwidget.h"
+#include <QtMath>
 
 GradientWidget::GradientWidget(QQuickItem *parent) :
     QQuickPaintedItem(parent)
@@ -10,15 +11,31 @@ void GradientWidget::paint(QPainter *painter)
     QPointF start;
     QPointF stop;
 
+    const qreal boundX = boundingRect().x();
+    const qreal boundY = boundingRect().y();
+    const qreal boundHeight = boundingRect().height();
+    const qreal boundWidth = boundingRect().width();
+
+    qreal diagonal = qSqrt(qPow(boundWidth, 2) + qPow(boundHeight, 2));
+    qreal b = diagonal / 2.0;
+    qreal alpha = qAtan(boundHeight / boundWidth);
+    qreal c = b / qCos(alpha);
+
     switch (p_startPoint) {
         case TopLeftCorner:
-            start = boundingRect().topLeft();
-            stop = boundingRect().bottomRight();
+            start.setX(boundX + (boundWidth - c));
+            start.setY(boundY);
+
+            stop.setX(boundX + c);
+            stop.setY(boundY + boundHeight);
             break;
 
         case TopRightCorner:
-            start = boundingRect().topRight();
-            stop = boundingRect().bottomLeft();
+            start.setX(boundX + c);
+            start.setY(boundY);
+
+            stop.setX(boundX + (boundWidth - c));
+            stop.setY(boundY + boundHeight);
             break;
     }
 
