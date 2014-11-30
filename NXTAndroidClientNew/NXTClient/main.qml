@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import Qt.WebSockets 1.0
 import QtSensors 5.0 as Sensors
+import QtGraphicalEffects 1.0
 
 import GradientWidget 1.0
 import AccelometerWidget 1.0
@@ -20,6 +21,7 @@ ApplicationWindow {
     }
 
     //-------------START STOP-------------
+    //GO
     GradientWidget {
         id: goWidget
 
@@ -30,6 +32,8 @@ ApplicationWindow {
         colors: ["#00C538", "#00E054"]
 
         Image {
+            id: blackArrow
+
             source: "resources/images/black_arrow.svg"
 
             width: goWidget.width / 7
@@ -39,6 +43,7 @@ ApplicationWindow {
             sourceSize.height: goWidget.height /7
 
             anchors.bottom: goText.top
+            anchors.bottomMargin: height / 3
             anchors.horizontalCenter: goText.horizontalCenter
         }
 
@@ -47,7 +52,7 @@ ApplicationWindow {
 
             text: "GO"
 
-            y: goWidget.height / 2 - goText.height / 2
+            y: (goWidget.height + blackArrow.height) / 2 - goText.height / 2
             x: goWidget.width / 2 - goText.width / 2
 
             font.pixelSize: goWidget.height / 3
@@ -55,6 +60,7 @@ ApplicationWindow {
         }
     }
 
+    //STOP
     GradientWidget {
         id: stopWidget
 
@@ -65,8 +71,96 @@ ApplicationWindow {
         colors: ["#C40001", "#EF0039"]
 
         anchors.top: goWidget.bottom
+
+        Image {
+            id: whiteArrow
+
+            source: "resources/images/white_arrow.svg"
+
+            width: stopWidget.width / 7
+            height: width
+            rotation: 180
+
+            sourceSize.width: stopWidget.width / 7
+            sourceSize.height: stopWidget.height /7
+
+            anchors.bottom: stopText.top
+            anchors.bottomMargin: height / 3
+            anchors.horizontalCenter: stopText.horizontalCenter
+        }
+
+        Text {
+            id: stopText
+
+            text: "BACK"
+            color: "white"
+
+            y: (stopWidget.height + blackArrow.height) / 2 - stopText.height / 2
+            x: stopWidget.width / 2 - stopText.width / 2
+
+            font.pixelSize: stopWidget.height / 3
+            font.family: startstopFont.name
+        }
     }
     //------------------------------------
+
+    //---------------INFO----------------
+    LinearGradient {
+        id: angleInfo
+
+        width: root.width * 0.25
+        height: root.height / 2
+
+        anchors.left: stopWidget.right
+
+        start: Qt.point(angleInfo.x + angleInfo.width / 2, angleInfo.y)
+        end: Qt.point(angleInfo.x, angleInfo.y + angleInfo.height - 1)
+
+        gradient: Gradient {
+                    GradientStop { position: 0.0; color: "#2B2B2B" }
+                    GradientStop { position: 1.0; color: "#1D1D1D" }
+        }
+
+        Text {
+            id: speedLabel
+
+            y: angleInfo.height / 5.5
+
+            text: "Speed level"
+            color: "white"
+
+            font.pixelSize: angleInfo.height / 16
+            font.family: helveticaBlack.name
+
+            anchors.horizontalCenter: angleInfo.horizontalCenter
+        }
+
+        Text {
+            id: speedText
+
+            text: (speedSlider.data * 100).toFixed(0) + "%"
+            color: "white"
+
+            font.pixelSize: angleInfo.height / 8
+            font.family: helveticaLight.name
+
+            anchors.horizontalCenter: angleInfo.horizontalCenter
+            anchors.top: speedLabel.bottom
+            anchors.topMargin: speedLabel.height / 2
+        }
+    }
+
+    Rectangle {
+        width: angleInfo.width
+        height: angleInfo.height
+
+        color: "#171717"
+
+        anchors.bottom: filler.bottom
+        anchors.left: stopWidget.right
+    }
+
+    //-----------------------------------
 
     //----------------SPEED---------------
     SliderWidget {
@@ -191,5 +285,16 @@ ApplicationWindow {
         id: startstopFont
         source: "resources/fonts/DIN.ttf"
     }
+
+    FontLoader {
+        id: helveticaLight
+        source: "resources/fonts/HelveticaNeueCE-UltraLight.otf"
+    }
+
+    FontLoader {
+        id: helveticaBlack
+        source: "resources/fonts/HelveticaNeueCE-Black.otf"
+    }
+
     //------------------------------------
 }

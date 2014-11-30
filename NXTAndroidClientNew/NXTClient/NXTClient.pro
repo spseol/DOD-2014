@@ -19,7 +19,8 @@ include(deployment.pri)
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 OTHER_FILES += \
-    android/AndroidManifest.xml
+    android/AndroidManifest.xml \
+    resources/fonts/DIN.ttf
 
 HEADERS += \
     components/parser/jsonparser.h \

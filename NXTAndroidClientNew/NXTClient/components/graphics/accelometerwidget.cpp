@@ -4,6 +4,9 @@
 AccelometerWidget::AccelometerWidget(QQuickItem *parent) :
     QQuickPaintedItem(parent)
 {
+    //load font
+    int id = QFontDatabase::addApplicationFont(":/resources/fonts/DIN.ttf");
+    fontFamily = QFontDatabase::applicationFontFamilies(id).at(0);
 }
 
 void AccelometerWidget::paint(QPainter *painter)
@@ -42,17 +45,13 @@ void AccelometerWidget::paint(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing);
     painter->drawPath(path);
 
-    //load font
-    int id = QFontDatabase::addApplicationFont("C:/Users/Sony/Documents/DOD/NXTAndroidClientNew/NXTClient/resources/fonts/DIN.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-
     //draw text
     painter->resetTransform();
-    painter->setFont(QFont(family, boundHeight / 5, QFont::Black));
+    painter->setFont(QFont(fontFamily, boundHeight / 5, QFont::Black));
     painter->setPen(QPen(QColor("white")));
     painter->setBrush(QBrush(QColor("white")));
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->drawText(boundingRect(), Qt::AlignCenter, QString::number(p_angle).append("°"));
+    painter->drawText(boundingRect(), Qt::AlignCenter, QString::number(abs(p_angle)).append("°"));
 }
 
 /*-------------------------------------*/
@@ -64,6 +63,7 @@ void AccelometerWidget::setAngle(qreal &value)
     if(p_angle != value)
     {
         p_angle = value;
+        this->update();
         emit angleChanged();
     }
 }

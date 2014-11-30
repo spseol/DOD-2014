@@ -5,5 +5,7 @@
         <file>qml.qrc</file>
         <file>resources/images/black_arrow.svg</file>
         <file>resources/images/white_arrow.svg</file>
+        <file>resources/fonts/HelveticaNeueCE-Black.otf</file>
+        <file>resources/fonts/HelveticaNeueCE-UltraLight.otf</file>
     </qresource>
 </RCC>

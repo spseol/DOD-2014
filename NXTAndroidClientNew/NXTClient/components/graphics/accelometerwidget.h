@@ -23,6 +23,8 @@ class AccelometerWidget : public QQuickPaintedItem
         int p_edgeWidth;
         int p_arrowWidth;
 
+        QString fontFamily;
+
     public:
         explicit AccelometerWidget(QQuickItem *parent = 0);
 
