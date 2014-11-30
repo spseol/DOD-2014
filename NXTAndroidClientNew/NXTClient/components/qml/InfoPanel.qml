@@ -10,8 +10,8 @@ Item {
         width: parent.width
         height: parent.height / 2
 
-        start: Qt.point(speedInfo.x + speedInfo.width / 2, speedInfo.y)
-        end: Qt.point(speedInfo.x, speedInfo.y + speedInfo.height - 1)
+        start: Qt.point(x + width / 2, y)
+        end: Qt.point(x, y + height - 1)
 
         gradient: Gradient {
                     GradientStop { position: 0.0; color: "#2B2B2B" }
@@ -21,15 +21,15 @@ Item {
         Text {
             id: speedLabel
 
-            y: speedInfo.height / 10
+            y: parent.height / 10
 
             text: "Speed level"
             color: "white"
 
-            font.pixelSize: speedInfo.height / 16
+            font.pixelSize: parent.height / 16
             font.family: helveticaBlack.name
 
-            anchors.horizontalCenter: speedInfo.horizontalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         Text {
@@ -38,10 +38,10 @@ Item {
             text: (sliderPanel.slider.data * 100).toFixed(0) + "%"
             color: "white"
 
-            font.pixelSize: speedInfo.height / 8
+            font.pixelSize: parent.height / 8
             font.family: helveticaLight.name
 
-            anchors.horizontalCenter: speedInfo.horizontalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: speedLabel.bottom
             anchors.topMargin: speedLabel.height / 2
         }
