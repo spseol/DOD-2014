@@ -30,7 +30,8 @@ void JSONParser::setData(QString &value)
 }
 
 QString JSONParser::data() {
-    QString result = p_data.remove(p_data.length() - 1, 1);
+    QString result = p_data;
+    result.remove(result.length() - 1, 1);
     result.append(" }");
 
     return result;
