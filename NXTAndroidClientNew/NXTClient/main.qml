@@ -111,7 +111,7 @@ ApplicationWindow {
                 return;
 
             parser.clearData()
-            parser.addRVariable("steering", (-accelometer.angle / 90).toFixed(1))
+            parser.addVariable("steering", ((-accelometer.angle / 90) * 90 / accelometer.lock).toFixed(2))
             parser.addVariable("trottle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
             parser.addVariable("reverse", buttonPanel.reverse)
             socket.sendTextMessage(parser.data)
@@ -147,7 +147,7 @@ ApplicationWindow {
     Sensors.Accelerometer {
         id: accelometer
 
-        property real tolerance: 0.3
+        property real tolerance: 0.05
         property real lock: 45
         property int previous: 11
         property real angle
@@ -161,13 +161,14 @@ ApplicationWindow {
 
         onReadingChanged: {
             var value = -accelometer.reading.y
+            var raw_value = value
 
             value = (value *9 >= accelometer.lock) ? accelometer.lock / 9 :value
             value = (value * 9 <= -accelometer.lock) ?(-accelometer.lock) / 9: value
             accelometer.angle = value * 9
 
-            if(value + accelometer.tolerance <= accelometer.previous || value - accelometer.tolerance >= accelometer.previous) {
-                accelometer.previous = value
+            if(raw_value + accelometer.tolerance <= accelometer.previous || raw_value - accelometer.tolerance >= accelometer.previous) {
+                accelometer.previous = raw_value
                 socket.dataChanged()
             }
         }

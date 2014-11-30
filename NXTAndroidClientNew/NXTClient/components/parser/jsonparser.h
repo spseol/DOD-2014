@@ -16,6 +16,7 @@ class JSONParser : public QObject
         explicit JSONParser(QObject *parent = 0);
 
         Q_INVOKABLE void addVariable(const QString name, int value);
+        Q_INVOKABLE void addVariable(const QString name, qreal value);
         Q_INVOKABLE void clearData();
 
         /*---Setters and getters---*/

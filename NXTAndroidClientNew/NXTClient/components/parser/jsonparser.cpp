@@ -20,6 +20,15 @@ void JSONParser::addVariable(const QString name, int value)
     p_data.append(",");
 }
 
+void JSONParser::addVariable(const QString name, qreal value)
+{
+    p_data.append("\"");
+    p_data.append(name);
+    p_data.append("\":");
+    p_data.append(QString::number(value));
+    p_data.append(",");
+}
+
 /*-------------------------------------*/
 /*---------------SETTERS---------------*/
 /*-------------------------------------*/
