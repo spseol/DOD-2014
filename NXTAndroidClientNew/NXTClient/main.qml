@@ -74,22 +74,27 @@ ApplicationWindow {
             switch(actualStatus) {
                 case WebSocket.Connecting:
                     console.log("Connecting");
+                    infoPanel.connectionText.text = "Connecting";
                     break;
 
                 case WebSocket.Open:
                     console.log("Open");
+                    infoPanel.connectionText.text = "Connected";
                     break;
 
                 case WebSocket.Closing:
                     console.log("Closing");
+                    infoPanel.connectionText.text = "Closing";
                     break;
 
                 case WebSocket.Closed:
-                    console.log("Closed")
+                    console.log("Closed");
+                    infoPanel.connectionText.text = "Closed";
                     break;
 
                 case WebSocket.Error:
                     console.log("Error (" + socket.errorString + ")")
+                    infoPanel.connectionText.text = socket.errorString;
                     break;
             }
         }

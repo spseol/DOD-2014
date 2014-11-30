@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtGraphicalEffects 1.0
 
 Item {
+    property alias connectionText: connetionText
     //---------------INFO----------------
     //SPEED
     LinearGradient {
@@ -73,7 +74,7 @@ Item {
         Text {
             id: connetionText
 
-            text: "Disconnected"
+            text: "Closed"
             color: "white"
 
             font.pixelSize: parent.height / 16
