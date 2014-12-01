@@ -3,12 +3,12 @@ $(function() {
     var log = ServerLogger.log;
     var $OK = $('#brick-ok');
     var $KO = $('#brick-ko, #cover');
-    var $trottle = $('input[name=trottle]');
+    var $throttle = $('input[name=trottle]');
 
-    RobotController.init($OK, $KO, $trottle, log);
+    RobotController.init($OK, $KO, $throttle, log);
     RobotController.toggleState(brickOK);
 
-    getErrorFun = function (message, msg_class) {
+    var getErrorFun = function (message, msg_class) {
         return function(evt) {  
             RobotController.toggleState(false, $OK, $KO);
             ServerLogger.log(message, msg_class, new Date());
