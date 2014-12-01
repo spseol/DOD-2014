@@ -3,7 +3,7 @@ $(function() {
     var log = ServerLogger.log;
     var $OK = $('#brick-ok');
     var $KO = $('#brick-ko, #cover');
-    var $throttle = $('input[name=trottle]');
+    var $throttle = $('input[name=throttle]');
 
     RobotController.init($OK, $KO, $throttle, log);
     RobotController.toggleState(brickOK);

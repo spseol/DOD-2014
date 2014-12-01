@@ -88,6 +88,10 @@ RobotController.toggleState = function (enable) {
 };
 
 RobotController.onKeyEvent = function (e) {
+    if (!e.keyCode in RobotController.activeKeys) {
+        return
+    }
+    e.preventDefault();
     if (e.type == 'keydown' || e.type == 'keypress') {
         RobotController.activeKeys[e.keyCode] = true;
         $('button[data-key=' + e.keyCode + ']').addClass('btn-danger').removeClass('btn-success');
@@ -96,7 +100,6 @@ RobotController.onKeyEvent = function (e) {
         $('button[data-key=' + e.keyCode + ']').addClass('btn-success').removeClass('btn-danger');
     }
     RobotController.refreshControlStatus();
-    e.preventDefault();
 };
 
 RobotController.connectEvents = function () {
@@ -113,7 +116,7 @@ RobotController.init = function ($OK, $KO, $throttle, log) {
     this.ws.onmessage = function (evt) {
         RobotController.toggleState($.parseJSON(evt.data).brick_found, $OK, $KO);
     };
-    setInterval(this.refreshControlStatus, 25);
+    setInterval(this.refreshControlStatus, 50);
     setInterval(this.refreshSteering, 50);
     this.connectEvents();
 };

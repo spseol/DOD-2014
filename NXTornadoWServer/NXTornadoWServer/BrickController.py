@@ -20,9 +20,9 @@ class BrickController(object):
         'reverse': 0,
     }
     STEERING_KEY = 'steering'
-    throttle_KEY = 'throttle'
+    THROTTLE_KEY = 'throttle'
     REVERSE_KEY = 'reverse'
-    FULL_SIDE_STEER = 240
+    FULL_SIDE_STEER = 1400
 
     @classmethod
     def init_brick(cls):
@@ -57,14 +57,13 @@ class BrickController(object):
     def process(cls, **commands):
         if not cls.brick_found:
             return
-        print(commands[cls.STEERING_KEY], cls.last_commands[cls.STEERING_KEY])
-        if commands[cls.STEERING_KEY] != cls.last_commands[cls.STEERING_KEY]:
-            abs_degs = int(commands[cls.STEERING_KEY] * cls.FULL_SIDE_STEER)
+        if commands.get(cls.STEERING_KEY, 0) != cls.last_commands.get(cls.STEERING_KEY, 0):
+            abs_degs = int(commands.get(cls.STEERING_KEY, 0) * cls.FULL_SIDE_STEER)
             cls.set_steering(abs_degs)
             logging.info('New steering!')
-        if commands[cls.throttle_KEY] != cls.last_commands[cls.throttle_KEY] or commands[cls.REVERSE_KEY] != \
-                cls.last_commands[cls.REVERSE_KEY]:
-            cls.set_throttle(commands[cls.throttle_KEY], commands[cls.REVERSE_KEY])
+        if commands.get(cls.THROTTLE_KEY, 0) != cls.last_commands.get(cls.THROTTLE_KEY, 0) or \
+            commands.get(cls.REVERSE_KEY, 0) != cls.last_commands.get(cls.REVERSE_KEY, 0):
+            cls.set_throttle(commands.get(cls.THROTTLE_KEY, 0), commands.get(cls.REVERSE_KEY, 0))
             logging.info('New throttle or reverse!')
         cls.last_commands = commands
 
@@ -89,10 +88,12 @@ class BrickController(object):
                 # cls.steering_motor.weak_turn(tacho, degs)
                 # cls.steering_motor.run(tacho)
                 # sleep(degs/850.0)
-                # cls.steering_motor.brake()
+                cls.steering_motor.brake()
+                pass
             except BlockedException:
                 logging.warning('Steering motor blocked!')
-            cls.actual_abs_degs = cls.steering_motor.get_tacho().block_tacho_count
+            # cls.actual_abs_degs = cls.steering_motor.get_tacho().block_tacho_count
+            cls.actual_abs_degs = abs_degs
 
 
     @classmethod
