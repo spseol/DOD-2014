@@ -71,9 +71,10 @@ ApplicationWindow {
         id: socket
 
         signal dataChanged()
+        property int counter: 0
 
-        active: false
-        url: "ws://192.168.2.104:8888/ws/control"
+        active: true
+        url: "ws://192.168.2.101:8888/ws/control"
 
         onStatusChanged: {
             var actualStatus = socket.status
@@ -112,29 +113,15 @@ ApplicationWindow {
 
             parser.clearData()
             parser.addVariable("steering", ((-accelometer.angle / 90) * 90 / accelometer.lock).toFixed(2))
-            parser.addVariable("trottle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
+            parser.addVariable("throttle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
             parser.addVariable("reverse", buttonPanel.reverse)
             socket.sendTextMessage(parser.data)
-            //console.log(parser.data)
+            console.log(counter+"--"+ parser.data)
+            counter++
         }
 
         onDataChanged: socket.sendData()
     }
-
-    //IP INPUT
-    TextField {
-        id: inputID
-
-        placeholderText: "Zadejte IP"
-        onAccepted: {
-            socket.url = "ws://" + inputID.text + "/ws/control"
-            socket.active = true
-            console.log(socket.url)
-            inputID.visible = false
-        }
-    }
-
-    //------------------------------------
 
     //----------------JSON----------------
     JSONParser {
@@ -152,7 +139,18 @@ ApplicationWindow {
             for(var key in touchPoints) {
                 var point = touchPoints[key]
 
-                sliderPanel.slider.handleTouch(point.x, point.y)
+                sliderPanel.slider.handleTouch(Qt.point(point.x, point.y))
+                buttonPanel.goWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "pressed")
+                buttonPanel.stopWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "pressed")
+            }
+        }
+
+        onReleased: {
+            for(var key in touchPoints) {
+                var point = touchPoints[key]
+
+                buttonPanel.goWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "release")
+                buttonPanel.stopWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "release")
             }
         }
 
@@ -161,11 +159,27 @@ ApplicationWindow {
                 var point = touchPoints[key]
 
                 if(point.pressed) {
-                    sliderPanel.slider.handleTouch(point.x, point.y)
+                    sliderPanel.slider.handleTouch(Qt.point(point.x, point.y))
+                    buttonPanel.goWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "pressed")
+                    buttonPanel.stopWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "pressed")
                 }
             }
         }
     }
+
+    //IP INPUT
+    TextField {
+        id: inputID
+
+        placeholderText: "Zadejte IP"
+        onAccepted: {
+            //socket.url = "ws://" + inputID.text + "/ws/control"
+            //socket.active = true
+            //console.log(socket.url)
+            inputID.visible = false
+        }
+    }
+    //------------------------------------
 
     //-------------ACCELOMETER------------
     Sensors.Accelerometer {
@@ -214,6 +228,5 @@ ApplicationWindow {
         id: helveticaBlack
         source: "resources/fonts/HelveticaNeueCE-Black.otf"
     }
-
     //------------------------------------
 }

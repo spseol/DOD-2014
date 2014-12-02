@@ -4,8 +4,10 @@ import GradientWidget 1.0
 Item {
     id: buttonGroup
 
-    property int reverse: 0
-    property bool pressed: false
+    property int reverse: stopWidget.pressed
+    property bool pressed: (goWidget.pressed || stopWidget.pressed)
+    property alias goWidget: goWidget
+    property alias stopWidget: stopWidget
     //-------------START STOP-------------
     //GO
     GradientWidget {
@@ -47,21 +49,8 @@ Item {
             font.family: startstopFont.name
         }
 
-        //HANDLE EVENTS
-        MouseArea {
-            anchors.fill: parent
-
-            onPressed: {
-                buttonGroup.reverse = 0
-                buttonGroup.pressed = true
-                socket.dataChanged()
-            }
-
-            onReleased: {
-                buttonGroup.pressed = false
-                socket.dataChanged()
-            }
-        }
+        onTouched: socket.dataChanged()
+        onReleased: socket.dataChanged()
     }
 
     //STOP
@@ -108,21 +97,8 @@ Item {
             font.family: startstopFont.name
         }
 
-        //HANDLE EVENTS
-        MouseArea {
-            anchors.fill: parent
-
-            onPressed: {
-                buttonGroup.reverse = 1
-                buttonGroup.pressed = true
-                socket.dataChanged()
-            }
-
-            onReleased: {
-                buttonGroup.pressed = false
-                socket.dataChanged()
-            }
-        }
+        onTouched: socket.dataChanged()
+        onReleased: socket.dataChanged()
     }
     //------------------------------------
 }

@@ -1,9 +1,32 @@
 #include "gradientwidget.h"
 #include <QtMath>
+#include "../../logic/touchlogic.h"
 
 GradientWidget::GradientWidget(QQuickItem *parent) :
     QQuickPaintedItem(parent)
 {
+    p_pressed = false;
+}
+
+void GradientWidget::handleTouch(QPoint p, int ID, QString type = "pressed")
+{
+    QObject *parent = this->parent();
+
+    p.rx() -= parent->property("x").toDouble() + this->x();
+    p.ry() -= parent->property("y").toDouble() + this->y();
+
+    if(TouchLogic::isInRect(p, boundingRect()) && !p_pressed && type == "pressed")
+    {
+        p_ID = ID;
+        setPressed(true); //because of emit signal
+        emit touched();
+    }
+
+    else if(((!TouchLogic::isInRect(p, boundingRect()) && p_pressed && type == "pressed") || (TouchLogic::isInRect(p, boundingRect()) && type == "release" && p_pressed)) && p_ID == ID)
+    {
+        setPressed(false); //because of emit signal
+        emit released();
+    }
 }
 
 void GradientWidget::paint(QPainter *painter)
@@ -70,6 +93,15 @@ void GradientWidget::setColors(QStringList &value)
     }
 }
 
+void GradientWidget::setPressed(bool value)
+{
+    if(p_pressed != value)
+    {
+        p_pressed = value;
+        emit pressedChanged();
+    }
+}
+
 /*-------------------------------------*/
 /*---------------GETTERS---------------*/
 /*-------------------------------------*/
@@ -83,3 +115,10 @@ QStringList GradientWidget::colors() const
 {
     return p_colors;
 }
+
+bool GradientWidget::pressed() const
+{
+    return p_pressed;
+}
+
+
