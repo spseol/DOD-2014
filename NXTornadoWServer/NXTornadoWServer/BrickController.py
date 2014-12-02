@@ -60,11 +60,9 @@ class BrickController(object):
         if commands.get(cls.STEERING_KEY, 0) != cls.last_commands.get(cls.STEERING_KEY, 0):
             abs_degs = int(commands.get(cls.STEERING_KEY, 0) * cls.FULL_SIDE_STEER)
             cls.set_steering(abs_degs)
-            logging.info('New steering!')
         if commands.get(cls.THROTTLE_KEY, 0) != cls.last_commands.get(cls.THROTTLE_KEY, 0) or \
             commands.get(cls.REVERSE_KEY, 0) != cls.last_commands.get(cls.REVERSE_KEY, 0):
             cls.set_throttle(commands.get(cls.THROTTLE_KEY, 0), commands.get(cls.REVERSE_KEY, 0))
-            logging.info('New throttle or reverse!')
         cls.last_commands = commands
 
     @classmethod    

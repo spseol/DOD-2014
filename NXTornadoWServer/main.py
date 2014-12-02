@@ -9,6 +9,7 @@ from NXTornadoWServer.IndexHandler import IndexHandler
 from NXTornadoWServer.LogHandlers import LoggerSocketHandler
 from NXTornadoWServer.ControlSocketHandler import ControlSocketHandler
 from NXTornadoWServer.LogHandlers import WebSocketsLogHandler
+from NXTornadoWServer.ClientsHandler import ClientsHandler
 from NXTornadoWServer.TimerHandler import TimerHandler
 
 
@@ -35,16 +36,21 @@ app = web.Application([
                           (r'/ws/control', ControlSocketHandler),
                           (r'/ws/logger', LoggerSocketHandler),
                           (r'/control/timer', TimerHandler),
+                          (r'/clients', ClientsHandler),
                           (r'/static/(.*)', StaticFileHandler, {"path": "static"})
-                      ], log_function=lambda x: x)
+                      ], log_function=lambda x: x, debug=True)
 
 if __name__ == '__main__':
     init_logging()
     on_reload()
     options.parse_command_line()
     app.listen(8888)
+    logging.info('Server starting.')
     ioloop = ioloop.IOLoop().instance()
     autoreload.add_reload_hook(on_reload)
     autoreload.start(ioloop)
-    ioloop.start()
-    logging.info('Server starting.')
+    try:
+        ioloop.start()
+    except KeyboardInterrupt:
+        on_reload()
+        raise

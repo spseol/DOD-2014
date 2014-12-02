@@ -77,14 +77,22 @@ RobotController.refreshSteering = function () {
     }
 };
 
-RobotController.toggleState = function (enable) {
-    if (enable) {
-        this.$OK.show(200);
-        this.$KO.hide(200);
+RobotController.toggleState = function (state) {
+    if (!state.error)  {
+        this.$KO.find('h3').text("Something's wrong.");
+        if (state.brick_found) {
+            this.$OK.show(200);
+            this.$KO.hide(200);
+        } else {
+            this.$KO.show(200);
+            this.$OK.hide(200);
+        }
     } else {
+        this.$KO.find('h3').text(state.error);
         this.$KO.show(200);
         this.$OK.hide(200);
     }
+
 };
 
 RobotController.onKeyEvent = function (e) {
@@ -114,7 +122,9 @@ RobotController.init = function ($OK, $KO, $throttle, log) {
     this.connectEvents();
     this.log = log;
     this.ws.onmessage = function (evt) {
-        RobotController.toggleState($.parseJSON(evt.data).brick_found, $OK, $KO);
+        var json_data = $.parseJSON(evt.data);
+        RobotController.toggleState(json_data);
+        console.log(json_data);
     };
     setInterval(this.refreshControlStatus, 50);
     setInterval(this.refreshSteering, 50);

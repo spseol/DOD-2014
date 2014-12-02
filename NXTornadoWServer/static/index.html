@@ -1,55 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>NXTornado web controller</title>
-    <link rel="stylesheet" href="/static/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/styles.css">
-    <script src="/static/jquery.js"></script>
-    <script src="/static/bootstrap.min.js"></script>
-
-    <script src="/static/ServerLogger.js"></script>
-    <script src="/static/RobotController.js"></script>
-    <script src="/static/main.js"></script>
-
-</head>
-<body>
-<div class="container">
-    <h1 class="text-center">
-        Status:
-            <button id="brick-ok" class="btn btn-success btn-lg">OK</button>
-            <button id="brick-ko" class="btn btn-danger btn-lg">KO</button>
-    </h1>
-    <div class="controller block text-center">
-        <h2>Robot controller</h2>
-        <div id="control-form" class="text-center">
-            <h3 id="steering"></h3>
-            <div style="margin-bottom:5px;">
-                <button class="btn text-center btn-success" data-key="38"><i class="icon-large icon-up-arrow"></i></button>
-            </div>
-            <button class="btn text-center btn-success" data-key="37"><i class="icon-large icon-left-arrow"></i></button>
-            <button class="btn text-center btn-success" data-key="40"><i class="icon-large icon-down-arrow"></i></button>
-            <button class="btn text-center btn-success" data-key="39"><i class="icon-large icon-right-arrow"></i></button>
-            <hr>
-            <input class="throttle-slider" type="range" name="throttle" value="90" step="1" min="0" max="100">
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-center">
+    Status:
+        <button id="brick-ok" class="btn btn-success btn-lg">OK</button>
+        <button id="brick-ko" class="btn btn-danger btn-lg">KO</button>
+</h1>
+<div class="controller block text-center">
+    <h2>Robot controller</h2>
+    <div id="control-form" class="text-center">
+        <h3 id="steering"></h3>
+        <div style="margin-bottom:5px;">
+            <button class="btn text-center btn-success" data-key="38"><i class="icon-large icon-up-arrow"></i></button>
         </div>
-        <div id="cover" class="cover"><h3 class="text-danger">Something's wrong...</h3></div>
+        <button class="btn text-center btn-success" data-key="37"><i class="icon-large icon-left-arrow"></i></button>
+        <button class="btn text-center btn-success" data-key="40"><i class="icon-large icon-down-arrow"></i></button>
+        <button class="btn text-center btn-success" data-key="39"><i class="icon-large icon-right-arrow"></i></button>
+        <hr>
+        <input class="throttle-slider" type="range" name="throttle" value="90" step="1" min="0" max="100">
     </div>
-    <div class="logger block">
-        <h2 class="text-center">Server logger</h2>
-        <div>
-            <samp id="logger">
+    <div id="cover" class="cover"><h3 class="text-danger">Something's wrong...</h3></div>
+</div>
+<div class="logger block">
+    <h2 class="text-center">Server logger</h2>
+    <div>
+        <samp id="logger">
 
-            </samp>
-        </div>
+        </samp>
     </div>
-	</div>
-    <script>
-    {% if brick_found %}
-        var brickOK = true;
-    {% else %}
-        var brickOK = false;
-    {% end %}
-    </script>
-</body>
-</html>
+</div>
+<script>
+{% if brick_found %}
+    var brickOK = true;
+{% else %}
+    var brickOK = false;
+{% end %}
+</script>
+{% end %}
