@@ -73,7 +73,7 @@ ApplicationWindow {
         id: socket
 
         signal dataChanged()
-        property int counter: 0
+        //property int counter: 0
 
         active: true
         url: "ws://192.168.2.101:8888/ws/control"
@@ -110,16 +110,16 @@ ApplicationWindow {
         }
 
         function sendData() {
-            //if(!socket.active || !socket.status == WebSocket.Open)
-                //return;
+            if(!socket.active || !socket.status == WebSocket.Open)
+                return;
 
             parser.clearData()
             parser.addVariable("steering", ((-accelometer.angle / 90) * 90 / accelometer.lock).toFixed(2))
             parser.addVariable("throttle", (buttonPanel.pressed) ?(sliderPanel.slider.data * 100).toFixed(0) :0)
             parser.addVariable("reverse", buttonPanel.reverse)
             socket.sendTextMessage(parser.data)
-            console.log(counter+"--"+ parser.data)
-            counter++
+            //console.log(counter+"--"+ parser.data)
+            //counter++
         }
 
         onDataChanged: socket.sendData()
