@@ -10,5 +10,6 @@
         <file>components/qml/ButtonPanel.qml</file>
         <file>components/qml/InfoPanel.qml</file>
         <file>components/qml/SliderPanel.qml</file>
+        <file>components/qml/AboutDialog.qml</file>
     </qresource>
 </RCC>
