@@ -26,6 +26,8 @@ ApplicationWindow {
 
             width: root.width * 0.375
             height: root.height
+
+            anchors.left: infoPanel.right
         }
 
         //INFO
@@ -35,7 +37,7 @@ ApplicationWindow {
             width: root.width * 0.25
             height: root.height
 
-            anchors.left: buttonPanel.right
+            anchors.left: sliderPanel.right
         }
 
         //SLIDER
@@ -45,7 +47,7 @@ ApplicationWindow {
             width: root.width * 0.375
             height: root.height
 
-            anchors.left: infoPanel.right
+            //anchors.left: infoPanel.right
         }
     }
 
@@ -108,8 +110,8 @@ ApplicationWindow {
         }
 
         function sendData() {
-            if(!socket.active || !socket.status == WebSocket.Open)
-                return;
+            //if(!socket.active || !socket.status == WebSocket.Open)
+                //return;
 
             parser.clearData()
             parser.addVariable("steering", ((-accelometer.angle / 90) * 90 / accelometer.lock).toFixed(2))
@@ -122,6 +124,7 @@ ApplicationWindow {
 
         onDataChanged: socket.sendData()
     }
+    //------------------------------------
 
     //----------------JSON----------------
     JSONParser {
@@ -129,6 +132,7 @@ ApplicationWindow {
     }
     //------------------------------------
 
+    //---------------EVENTS---------------
     MultiPointTouchArea {
         id: touchArea
 
@@ -166,27 +170,14 @@ ApplicationWindow {
             }
         }
     }
-
-    //IP INPUT
-    TextField {
-        id: inputID
-
-        placeholderText: "Zadejte IP"
-        onAccepted: {
-            //socket.url = "ws://" + inputID.text + "/ws/control"
-            //socket.active = true
-            //console.log(socket.url)
-            inputID.visible = false
-        }
-    }
     //------------------------------------
 
     //-------------ACCELOMETER------------
     Sensors.Accelerometer {
         id: accelometer
 
-        property real tolerance: 0.05
-        property real lock: 45
+        property real tolerance: 0.45
+        property real lock: 60
         property int previous: 11
         property real angle
 
