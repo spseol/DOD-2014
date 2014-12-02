@@ -7,6 +7,8 @@ Item {
     SliderWidget {
         id: speedSlider
 
+        property int previous: 0
+
         width: parent.width
         height: parent.height
 
@@ -15,7 +17,17 @@ Item {
 
         data: 0
 
-        onDataChanged: socket.dataChanged()
+        onDataChanged: {
+            var value = (data * 100).toFixed(0)
+            var tolerance = 2
+            var previous = speedSlider.previous
+
+            if(buttonPanel.pressed)
+                if(previous + tolerance <= value || previous - tolerance >= value) {
+                    speedSlider.previous = value
+                    socket.dataChanged()
+                }
+        }
     }
 
     //TOP ARROW

@@ -87,7 +87,7 @@ Item {
         Text {
             id: stopText
 
-            text: "BACK"
+            text: "STOP"
             color: "white"
 
             y: (stopWidget.height + blackArrow.height) / 2 - stopText.height / 2
