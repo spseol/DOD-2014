@@ -29,7 +29,7 @@ ApplicationWindow {
         property bool openR: false
 
         active: true
-        url: "ws://192.168.43.212:8888/ws/control"
+        url: "ws://192.168.2.101:8888/ws/control"
 
         onTextMessageReceived: console.log(message)
 
