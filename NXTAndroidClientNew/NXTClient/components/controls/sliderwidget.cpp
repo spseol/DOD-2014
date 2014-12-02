@@ -7,15 +7,15 @@ SliderWidget::SliderWidget(QQuickItem *parent) :
 {
 }
 
-void SliderWidget::handleTouch(int x, int y)
+void SliderWidget::handleTouch(QPoint p)
 {
     QObject *parent = this->parent();
-    int absoluteY = y;
+    int absoluteY = p.y();
 
-    x -= parent->property("x").toDouble();
-    y -= parent->property("y").toDouble();
+    p.rx() -= parent->property("x").toDouble();
+    p.ry() -= parent->property("y").toDouble();
 
-    if(!TouchLogic::isInRect(x, y, boundingRect()))
+    if(!TouchLogic::isInRect(p, boundingRect()))
         return;
 
     qreal boundingHeight = boundingRect().height();

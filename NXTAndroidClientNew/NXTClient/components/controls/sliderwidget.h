@@ -35,7 +35,7 @@ class SliderWidget : public QQuickPaintedItem
         /*-------------------------*/
 
     public slots:
-        void handleTouch(int x, int y);
+        void handleTouch(QPoint p);
 
     signals:
         void activeColorChanged();
