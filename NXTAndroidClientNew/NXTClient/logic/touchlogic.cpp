@@ -16,7 +16,7 @@ bool TouchLogic::isInRect(int x, int y, QRectF rect)
         return false;
 }
 
-bool TouchLogic::isInRect(QPointF point, QRectF rect)
+bool TouchLogic::isInRect(QPoint point, QRectF rect)
 {
     if(point.x() >= rect.x() && point.x() <= rect.x() + rect.width() && point.y() >= rect.y() && point.y() <= rect.y() + rect.height())
         return true;

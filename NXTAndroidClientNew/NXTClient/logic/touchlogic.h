@@ -11,7 +11,7 @@ class TouchLogic : public QObject
         explicit TouchLogic(QObject *parent = 0);
 
         static bool isInRect(int x, int y, QRectF rect);
-        static bool isInRect(QPointF point, QRectF rect);
+        static bool isInRect(QPoint point, QRectF rect);
 };
 
 #endif // TOUCHLOGIC_H
