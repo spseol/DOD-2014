@@ -1,5 +1,4 @@
-from RPi.GPIO as GPIO
-from Crypto.Random.random import randint
+from RPi import GPIO
 from requests.api import post
 from time import sleep
 import sys
@@ -7,8 +6,8 @@ import sys
 from datetime import datetime
 
 GPIO.setmode(GPIO.BOARD)
-CONTROL_PORT = 6
-ENABLE_PORT = 5
+CONTROL_PORT = 24
+ENABLE_PORT = 23
 GPIO_DELAY = 0.5  # #delay for GPIO
 start_time = None
 GPIO.setup(ENABLE_PORT, GPIO.OUT)
@@ -46,7 +45,7 @@ while 1:
             else:
                 lap_time = datetime.now() - start_time
                 start_time = None
-                set_port(ENEBLE_PORT, False)
+                set_port(ENABLE_PORT, False)
 		r = post(url, data={'time': lap_time.seconds * 1000 + lap_time.microseconds / 1000.0})
                 break
 
