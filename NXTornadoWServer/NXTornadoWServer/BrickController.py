@@ -22,7 +22,7 @@ class BrickController(object):
     STEERING_KEY = 'steering'
     THROTTLE_KEY = 'throttle'
     REVERSE_KEY = 'reverse'
-    FULL_SIDE_STEER = 1400
+    FULL_SIDE_STEER = 140
 
     @classmethod
     def init_brick(cls):
@@ -82,7 +82,7 @@ class BrickController(object):
                 degs = abs(abs_degs - cls.actual_abs_degs)
             logging.info('Steer {} degs to {}.'.format(degs, ('left', 'right')[tacho > 0]))
             try:
-                cls.steering_motor.turn(tacho, degs, brake=True)
+                cls.steering_motor.turn(tacho, degs, brake=False)
                 # cls.steering_motor.weak_turn(tacho, degs)
                 # cls.steering_motor.run(tacho)
                 # sleep(degs/850.0)
@@ -104,8 +104,8 @@ class BrickController(object):
             throttle = 0.0
 
         if throttle <= 0:
-            cls.main_motors[1].brake()
-            cls.main_motors[0].brake()
+            cls.main_motors[1].idle()
+            cls.main_motors[0].idle()
             return
         # <0,100> trans to <(0.7*127),127>
         motor_throttle = int((0.5 + 0.5 * (throttle / 100.0)) * 127)

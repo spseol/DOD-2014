@@ -4,7 +4,6 @@ import logging
 from tornado.escape import json_decode
 
 from tornado.websocket import WebSocketHandler
-from usb.core import USBError
 
 from BrickController import BrickController
 
@@ -64,7 +63,7 @@ class ControlSocketHandler(WebSocketHandler):
                      .format(len(self.messages), self.request.remote_ip, msg_dict))
         try:
             BrickController.process(**msg_dict)
-        except (USBError, BluetoothError):
+        except (BluetoothError):
             BrickController.brick_found = False
             for cl in self.clients:
                 cl.write_message(BrickController.get_state())

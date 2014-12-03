@@ -61,7 +61,7 @@ RobotController.refreshControlStatus = function () {
 
 RobotController.refreshSteering = function () {
     var RC = RobotController;
-    var step = 2.5;
+    var step = 50;
     var steering = RC.actualSteering;
     if (RC.activeKeys[RC.keys.left] && !RC.activeKeys[RC.keys.right]) {
         RC.actualSteering += (RC.actualSteering > -100) ? -step : 0;
