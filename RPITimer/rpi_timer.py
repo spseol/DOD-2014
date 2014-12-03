@@ -1,3 +1,4 @@
+from RPi.GPIO as GPIO
 from Crypto.Random.random import randint
 from requests.api import post
 from time import sleep
@@ -5,24 +6,20 @@ import sys
 
 from datetime import datetime
 
-
+GPIO.setmode(GPIO.BOARD)
 CONTROL_PORT = 6
 ENABLE_PORT = 5
 GPIO_DELAY = 0.5  # #delay for GPIO
 start_time = None
-
+GPIO.setup(ENABLE_PORT, GPIO.OUT)
+GPIO.setup(CONTROL_PORT, GPIO.IN)
 
 def is_port_active(port):
-    # some magic about GPIO
-    r = randint(0, 100000)
-    return r > 99999
-    # some magic about GPIO
+    return GPIO.input(port)
 
 
-def set_port_active(port):
-    # some magic
-    pass
-
+def set_port(port, enable):
+    GPIO.output(port, enable)
 
 def print_elapsed(td):
     sys.stdout.write('\r{:.4}s.'.format(td.seconds + td.microseconds / 10.0 ** 6))
@@ -36,7 +33,7 @@ while 1:
     if not i in ('y', 'n') or i == 'n':
         continue
 
-    set_port_active(ENABLE_PORT)
+    set_port(ENABLE_PORT, True)
     while 1:
         lap_time = datetime.now() - (start_time if not start_time is None else datetime.now())
         print_elapsed(lap_time)
@@ -49,6 +46,7 @@ while 1:
             else:
                 lap_time = datetime.now() - start_time
                 start_time = None
-                r = post(url, data={'time': lap_time.seconds * 1000 + lap_time.microseconds / 1000.0})
+                set_port(ENEBLE_PORT, False)
+		r = post(url, data={'time': lap_time.seconds * 1000 + lap_time.microseconds / 1000.0})
                 break
 
