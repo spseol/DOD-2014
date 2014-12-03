@@ -3,6 +3,7 @@ import QtQuick.Controls 1.2
 import Qt.WebSockets 1.0
 import QtSensors 5.0 as Sensors
 import QtGraphicalEffects 1.0
+import QtQuick.Dialogs 1.2
 
 import AccelometerWidget 1.0
 import JSONParser 1.0
@@ -53,6 +54,8 @@ ApplicationWindow {
 
     //--------------"COMPASS"-------------
     AccelometerWidget {
+        id: accelometerWidget
+
         width: height
         height: root.height * 0.56
 
@@ -65,18 +68,27 @@ ApplicationWindow {
         angle: -accelometer.angle.toFixed(0)
 
         anchors.centerIn: filler
+
+        onTouched: aboutDialog.visible = true
     }
     //------------------------------------
+
+    MessageDialog {
+        id: aboutDialog
+
+        title: "About"
+        text: "©VOŠ a SPŠEOL - 2014<br>Android client: Sony Nguyen<br>UI Designer: Matěj Mitaš<br>Server, NXT: Josef Kolář<br>NXT HW: Tomáš Mrázek<br>Other HW: Martin Mitter"
+        onAccepted: Qt.openUrlExternally("http://bit.ly/spseol-DOD-2014")
+    }
 
     //------------DATA TRANSFER-----------
     WebSocket {
         id: socket
 
         signal dataChanged()
-        //property int counter: 0
 
         active: true
-        url: "ws://192.168.2.101:8888/ws/control"
+        url: "ws://192.168.43.173:8888/ws/control"
 
         onStatusChanged: {
             var actualStatus = socket.status
@@ -142,7 +154,7 @@ ApplicationWindow {
         onPressed: {
             for(var key in touchPoints) {
                 var point = touchPoints[key]
-
+                accelometerWidget.handleTouch(Qt.point(point.x, point.y))
                 sliderPanel.slider.handleTouch(Qt.point(point.x, point.y))
                 buttonPanel.goWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "pressed")
                 buttonPanel.stopWidget.handleTouch(Qt.point(point.x, point.y), point.pointId, "pressed")
@@ -176,7 +188,7 @@ ApplicationWindow {
     Sensors.Accelerometer {
         id: accelometer
 
-        property real tolerance: 0.45
+        property real tolerance: 1
         property real lock: 60
         property int previous: 11
         property real angle
@@ -196,7 +208,7 @@ ApplicationWindow {
             value = (value * 9 <= -accelometer.lock) ?(-accelometer.lock) / 9: value
             accelometer.angle = value * 9
 
-            if(raw_value + accelometer.tolerance <= accelometer.previous || raw_value - accelometer.tolerance >= accelometer.previous) {
+            if(Math.abs(raw_value - accelometer.previous) > accelometer.tolerance) {
                 accelometer.previous = raw_value
                 socket.dataChanged()
             }

@@ -46,7 +46,12 @@ class AccelometerWidget : public QQuickPaintedItem
         int arrowWidth() const;
         /*-------------------------*/
 
+    public slots:
+        void handleTouch(QPoint p);
+
     signals:
+        void touched();
+
         void angleChanged();
         void colorChanged();
         void edgeColorChanged();

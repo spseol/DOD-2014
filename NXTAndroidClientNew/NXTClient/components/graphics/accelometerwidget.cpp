@@ -1,5 +1,6 @@
 #include "accelometerwidget.h"
 #include <QFontDatabase>
+#include "../../logic/touchlogic.h"
 
 AccelometerWidget::AccelometerWidget(QQuickItem *parent) :
     QQuickPaintedItem(parent)
@@ -7,6 +8,19 @@ AccelometerWidget::AccelometerWidget(QQuickItem *parent) :
     //load font
     int id = QFontDatabase::addApplicationFont(":/resources/fonts/DIN.ttf");
     fontFamily = QFontDatabase::applicationFontFamilies(id).at(0);
+}
+
+void AccelometerWidget::handleTouch(QPoint p)
+{
+    QObject *parent = this->parent();
+
+    p.rx() -= this->x();
+    p.ry() -= this->y();
+    qDebug() << p.x() << "---" << p.y();
+    qDebug() <<"--" << boundingRect().x() << "---" << boundingRect().y();
+
+    if(TouchLogic::isInRect(p, boundingRect()))
+        emit touched();
 }
 
 void AccelometerWidget::paint(QPainter *painter)
