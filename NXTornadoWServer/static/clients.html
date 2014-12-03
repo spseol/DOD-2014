@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import datetime %}
+{% block js %}
+<script>
+$(function() {
+    $('button.controller-set').click(function(event) {
+        console.log('yeah');
+        $.post("/clients", {i: $(this).data('i')*1 }).always(function() {
+             location.reload();
+        });
+    });
+});
+</script>
+{% end %}
+{% block content %}
+<h2></h2>
+<div class="controller block">
+<h1 class="text-center">Actually connected clients</h1>
+<hr>
+    <table class="table">
+        <tr>
+            <th>IP</th>
+            <th>user-agent</th>
+            <th>total messages</th>
+            <th>connected</th>
+            <th>controller</th>
+        </tr>
+        {% for i, client in enumerate(clients) %}
+        <tr{% if i == controller_i %} class="warning"{% end %}>
+            <td>{{ client.request.remote_ip }}</td>
+            <td>{{ client.request.headers.get('User-Agent', 'not found') }}</td>
+            <td>{{ len(client.messages) }}</td>
+            <td>{{ datetime.datetime.fromtimestamp(client.request._start_time).strftime('%H:%M:%S') }}</td>
+            <td>{% if not i == controller_i%}<button class="btn btn-warning controller-set" data-i="{{ i }}">SET</button>{% end %}</td>    
+        </tr>
+        {% end %}
+    </table>
+</div>
+{% end %}
