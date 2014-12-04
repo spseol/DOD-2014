@@ -16,8 +16,6 @@ class ControlSocketHandler(WebSocketHandler):
         self.messages = []
 
     def open(self):
-        if self in self.clients:
-            logging.warning('fuck, existing WS')
         self.clients.append(self)
         if self.client_controller is None and len(self.clients) == 1:
             self.client_controller = self
@@ -31,6 +29,7 @@ class ControlSocketHandler(WebSocketHandler):
         ret_msg = BrickController.get_state()
         if not BrickController.brick_found:
             ret_msg.update({'error': 'Brick not found.'})
+        self.refresh_clients()
         self.write_message(ret_msg)
 
     def on_close(self):
@@ -39,7 +38,8 @@ class ControlSocketHandler(WebSocketHandler):
         else:
             self.clients.remove(self)
         if len(self.clients) > 1:
-            self.client_controller = self.clients[-1]
+            self.client_controller = self.clients[0]
+        self.refresh_clients()
         logging.info('WS from {} closed ({} sockets remaining).'
                      .format(self.request.remote_ip, len(self.clients)))
 
@@ -50,6 +50,7 @@ class ControlSocketHandler(WebSocketHandler):
             self.write_message(ret_msg)
             return
         if not self.is_client_controller():
+            self.refresh_clients()
             return
 
         self.messages.append(message)
@@ -68,19 +69,18 @@ class ControlSocketHandler(WebSocketHandler):
                 cl.write_message(BrickController.get_state())
 
     def is_client_controller(self):
-        if self.client_controller != self:
-            ret_msg = BrickController.get_state()
-            ret_msg.update({'error': "Sorry, you're actually not the main client."})
-            self.write_message(ret_msg)
-            return False
-        return True
+        return self.client_controller == self
 
     @classmethod
     def refresh_clients(cls):
-        for cl in cls.clients:
-            ret = BrickController.get_state()
-            if not cl == cls.client_controller:
-                ret.update({'error': "Sorry, you're actually not the main client."})
+        clients = cls.clients[:]
+        try:
+            clients.remove(cls.client_controller)
+        except ValueError:
+            pass
+        ret = BrickController.get_state()
+        ret.update({'error': "Sorry, you're actually not the main client."})
+        for cl in clients:
             cl.write_message(ret)
 
 

@@ -27,14 +27,16 @@ var RobotController = {
         39: false,
         40: false,
         32: false
-    }
+    },
+    reset: 0
 };
 
 RobotController.getControlStatus = function () {
     var obj = {
         steering: this.actualSteering / 100.0,
         throttle: 0,
-        reverse: 0
+        reverse: 0,
+        reset: this.reset
     };
     if (this.activeKeys[this.keys.down]) {
         obj.throttle = parseInt(this.$throttle.val());
@@ -50,9 +52,9 @@ RobotController.getControlStatus = function () {
 RobotController.refreshControlStatus = function () {
     var status = RobotController.getControlStatus();
     var lastStatus = RobotController.lastControlStatus;
-    if (status.steering == lastStatus.steering &&
-        status.throttle == lastStatus.throttle &&
-        status.reverse == lastStatus.reverse) {
+    if ((status.steering == lastStatus.steering &&
+    status.throttle == lastStatus.throttle &&
+        status.reverse == lastStatus.reverse) || !status.reset) {
         return
     }
     RobotController.lastControlStatus = status;
@@ -99,7 +101,7 @@ RobotController.toggleState = function (state) {
 };
 
 RobotController.onKeyEvent = function (e) {
-    if (!e.keyCode in RobotController.activeKeys) {
+    if (!(e.keyCode in RobotController.activeKeys)) {
         return
     }
     e.preventDefault();
@@ -113,8 +115,15 @@ RobotController.onKeyEvent = function (e) {
     RobotController.refreshControlStatus();
 };
 
+RobotController.onReset = function (e) {
+    RobotController.reset = 1;
+    RobotController.refreshControlStatus();
+    RobotController.reset = 0;
+};
+
 RobotController.connectEvents = function () {
     $('html').on('keydown keyup keypress', this.onKeyEvent);
+    $('button.reset').click(this.onReset);
 };
 
 RobotController.init = function ($OK, $KO, $throttle, log) {

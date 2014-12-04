@@ -3,15 +3,16 @@ import logging
 
 from tornado.websocket import WebSocketHandler
 
+
 class LoggerSocketHandler(WebSocketHandler):
     clients = []
 
     def open(self):
         if self not in self.clients:
             self.clients.append(self)
-	msgs = WebSocketsLogHandler.dicts[:]
-	if len(msgs) > 150:
-	    msgs = msgs[-150:]
+        msgs = WebSocketsLogHandler.messages
+        if len(msgs) > 50:
+            msgs = msgs[-50:]
         for d in msgs:
             self.write_message(d)
 
@@ -25,7 +26,7 @@ class LoggerSocketHandler(WebSocketHandler):
 
 class WebSocketsLogHandler(Handler):
     level = logging.INFO
-    dicts = []
+    messages = []
 
     def emit(self, record):
         assert isinstance(record, LogRecord)
@@ -35,6 +36,6 @@ class WebSocketsLogHandler(Handler):
             'created': record.created
 
         }
-        self.dicts.append(msg_dict)
+        self.messages.append(msg_dict)
         for client in LoggerSocketHandler.clients:
             client.write_message(msg_dict)

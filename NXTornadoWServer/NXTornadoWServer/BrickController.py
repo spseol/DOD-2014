@@ -58,6 +58,9 @@ class BrickController(object):
     def process(cls, **commands):
         if not cls.brick_found:
             return
+        if commands.get('reset', 0):
+            cls.reset()
+            return
         if commands.get(cls.STEERING_KEY, 0) != cls.last_commands.get(cls.STEERING_KEY, 0):
             abs_degs = int(commands.get(cls.STEERING_KEY, 0) * cls.FULL_SIDE_STEER)
             cls.set_steering(abs_degs)
@@ -126,10 +129,14 @@ class BrickController(object):
             'steering_motor': cls.steering_motor._get_state().to_list() if cls.steering_motor else []
         }
 
-    def __del__(self):
-        print('Brick deleted')
-        try:
-            BrickController.motCont.stop()
-            BrickController.brick.sock.close()
-        except:
-            pass
+    @classmethod
+    def reset(cls):
+        cls.main_motors[1].idle()
+        cls.main_motors[0].idle()
+        degrees = cls.steering_motor.get_tacho().block_tacho_count
+        if degrees > 0:
+            cls.steering_motor.turn(-127, degrees)
+        else:
+            cls.steering_motor.turn(127, degrees)
+        logging.warning('Reseting!')
+        sleep(2)
