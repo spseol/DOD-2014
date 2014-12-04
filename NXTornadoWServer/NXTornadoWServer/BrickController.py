@@ -23,6 +23,7 @@ class BrickController(object):
     THROTTLE_KEY = 'throttle'
     REVERSE_KEY = 'reverse'
     FULL_SIDE_STEER = 90
+    DEGREE_TIME = (1/2.95)*(1/360.0)*1000
 
     @classmethod
     def init_brick(cls):
@@ -82,10 +83,10 @@ class BrickController(object):
                 degs = abs(abs_degs - cls.actual_abs_degs)
             logging.info('Steer {} degs to {}.'.format(degs, ('left', 'right')[tacho > 0]))
             try:
-                cls.steering_motor.turn(tacho, degs, brake=False)
+                # cls.steering_motor.turn(tacho, degs, brake=False)
                 # cls.steering_motor.weak_turn(tacho, degs)
-                # cls.steering_motor.run(tacho)
-                # sleep(degs/850.0)
+                cls.steering_motor.run(tacho)
+                sleep(degs*cls.DEGREE_TIME)
                 cls.steering_motor.brake()
                 pass
             except BlockedException:

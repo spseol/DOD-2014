@@ -61,19 +61,22 @@ RobotController.refreshControlStatus = function () {
 
 RobotController.refreshSteering = function () {
     var RC = RobotController;
-    var step = 50;
-    var steering = RC.actualSteering;
+    var step = 20;
     if (RC.activeKeys[RC.keys.left] && !RC.activeKeys[RC.keys.right]) {
-        RC.actualSteering += (RC.actualSteering > -100) ? -step : 0;
+        RC.actualSteering -= step;
     } else if (RC.activeKeys[RC.keys.right] && !RC.activeKeys[RC.keys.left]) {
-        RC.actualSteering += (RC.actualSteering < 100) ? step : 0;
+        RC.actualSteering += step
     } else {
-        if (Math.abs(RC.actualSteering) <= 110) {
-            RC.actualSteering += (RC.actualSteering > 0) ? -step : ((RC.actualSteering == 0) ? 0 : step);
+        if (RC.actualSteering > 0) {
+            RC.actualSteering -= step;
+        } else if (RC.actualSteering < 0) {
+            RC.actualSteering += step;
         }
     }
-    if (RC.actualSteering != steering) {
-        //RC.refreshControlStatus();
+    if (RC.actualSteering >= 100) {
+        RC.actualSteering = 100;
+    } else if (RC.actualSteering <= -100) {
+        RC.actualSteering = -100;
     }
 };
 
@@ -126,7 +129,7 @@ RobotController.init = function ($OK, $KO, $throttle, log) {
         RobotController.toggleState(json_data);
         console.log(json_data);
     };
-    setInterval(this.refreshControlStatus, 100);
+    setInterval(this.refreshControlStatus, 101);
     setInterval(this.refreshSteering, 100);
     this.connectEvents();
 };
