@@ -23,7 +23,7 @@ class BrickController(object):
     THROTTLE_KEY = 'throttle'
     REVERSE_KEY = 'reverse'
     FULL_SIDE_STEER = 90
-    DEGREE_TIME = (1/2.95)*(1/360.0)*1000
+    DEGREE_TIME = (1/2.95)*(1/360.0)
 
     @classmethod
     def init_brick(cls):
