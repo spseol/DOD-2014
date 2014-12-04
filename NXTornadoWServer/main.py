@@ -37,9 +37,8 @@ app = web.Application([
                           (r'/ws/logger', LoggerSocketHandler),
                           (r'/control/timer', TimerHandler),
                           (r'/clients', ClientsHandler),
-                          (r'/static/(.*)', StaticFileHandler, {"path": "static"})
-                      ], log_function=lambda x: x, debug=True)
-
+                          (r'/static/(.*)', StaticFileHandler, {"path": '/home/pi/DOD-2014/NXTornadoWServer/static/'})
+                      ], log_function=lambda x: x, degug=True)
 if __name__ == '__main__':
     init_logging()
     on_reload()

@@ -22,7 +22,7 @@ class BrickController(object):
     STEERING_KEY = 'steering'
     THROTTLE_KEY = 'throttle'
     REVERSE_KEY = 'reverse'
-    FULL_SIDE_STEER = 140
+    FULL_SIDE_STEER = 90
 
     @classmethod
     def init_brick(cls):

@@ -126,7 +126,7 @@ RobotController.init = function ($OK, $KO, $throttle, log) {
         RobotController.toggleState(json_data);
         console.log(json_data);
     };
-    setInterval(this.refreshControlStatus, 50);
-    setInterval(this.refreshSteering, 50);
+    setInterval(this.refreshControlStatus, 100);
+    setInterval(this.refreshSteering, 100);
     this.connectEvents();
 };
