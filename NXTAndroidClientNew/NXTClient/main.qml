@@ -13,8 +13,8 @@ ApplicationWindow {
     id: root
 
     visible: true
-    width: 854
-    height: 480
+    width: 1024
+    height: 728
 
     //FILLER
     Item {
@@ -47,8 +47,6 @@ ApplicationWindow {
 
             width: root.width * 0.375
             height: root.height
-
-            //anchors.left: infoPanel.right
         }
     }
 
@@ -70,9 +68,13 @@ ApplicationWindow {
         anchors.centerIn: filler
 
         onTouched: aboutDialog.visible = true
+        onAngleChanged: {
+
+        }
     }
     //------------------------------------
 
+    //----------------ABOUT---------------
     MessageDialog {
         id: aboutDialog
 
@@ -80,15 +82,16 @@ ApplicationWindow {
         text: "©VOŠ a SPŠEOL - 2014<br>Android client: Sony Nguyen<br>UI Designer: Matěj Mitaš<br>Server, NXT: Josef Kolář<br>NXT HW: Tomáš Mrázek<br>Other HW: Martin Mitter"
         onAccepted: Qt.openUrlExternally("http://bit.ly/spseol-DOD-2014")
     }
+    //------------------------------------
 
     //------------DATA TRANSFER-----------
     WebSocket {
         id: socket
 
         signal dataChanged()
-
-        active: true
-        url: "ws://192.168.43.173:8888/ws/control"
+        property int counter: 0
+        active: false
+        url: "ws://192.168.2.101:8888/ws/control"
 
         onStatusChanged: {
             var actualStatus = socket.status
@@ -148,6 +151,7 @@ ApplicationWindow {
     MultiPointTouchArea {
         id: touchArea
 
+        enabled: false
        anchors.fill: filler
         maximumTouchPoints: 5
 
@@ -184,14 +188,26 @@ ApplicationWindow {
     }
     //------------------------------------
 
+    //--------------IP INPUT--------------
+    TextField {
+        onAccepted: {
+            socket.url = "ws://" + text + "/ws/control"
+            socket.active = true
+            touchArea.enabled = true
+            visible = false
+        }
+    }
+    //------------------------------------
+
     //-------------ACCELOMETER------------
     Sensors.Accelerometer {
         id: accelometer
 
-        property real tolerance: 1
+        property real tolerance: 3
         property real lock: 60
         property int previous: 11
         property real angle
+        property int previousMax: 0
 
         Behavior on angle {
             NumberAnimation { duration: 300 }
@@ -203,6 +219,10 @@ ApplicationWindow {
         onReadingChanged: {
             var value = -accelometer.reading.y
             var raw_value = value
+            var max = false
+
+            if((value *9 >= accelometer.lock) || (value * 9 <= -accelometer.lock))
+                max = true
 
             value = (value *9 >= accelometer.lock) ? accelometer.lock / 9 :value
             value = (value * 9 <= -accelometer.lock) ?(-accelometer.lock) / 9: value
@@ -210,6 +230,11 @@ ApplicationWindow {
 
             if(Math.abs(raw_value - accelometer.previous) > accelometer.tolerance) {
                 accelometer.previous = raw_value
+                socket.dataChanged()
+            }
+
+            if(max && accelometer.previousMax != (-accelometer.angle.toFixed(0))) {
+                accelometer.previousMax = -accelometer.angle.toFixed(0)
                 socket.dataChanged()
             }
         }

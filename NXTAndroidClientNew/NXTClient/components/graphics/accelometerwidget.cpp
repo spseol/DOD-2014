@@ -16,8 +16,6 @@ void AccelometerWidget::handleTouch(QPoint p)
 
     p.rx() -= this->x();
     p.ry() -= this->y();
-    qDebug() << p.x() << "---" << p.y();
-    qDebug() <<"--" << boundingRect().x() << "---" << boundingRect().y();
 
     if(TouchLogic::isInRect(p, boundingRect()))
         emit touched();
