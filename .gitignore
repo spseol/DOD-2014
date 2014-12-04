@@ -1,2 +1,11 @@
 NXTAndroidClientNew/build-Android/
 NXTAndroidClientNew/build-NXTClient-Desktop_Qt_5_3_MinGW_32bit-Vydání/
+LEDMatrix/.dep/main.o.d
+LEDMatrix/main.eep
+LEDMatrix/main.elf
+LEDMatrix/main.hex
+LEDMatrix/main.sym
+LEDMatrix/main.map
+LEDMatrix/main.lss
+LEDMatrix/main.lst
+LEDMatrix/main.o
