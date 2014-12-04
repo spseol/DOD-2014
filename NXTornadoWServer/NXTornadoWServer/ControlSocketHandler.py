@@ -1,4 +1,3 @@
-from bluetooth.btcommon import BluetoothError
 import logging
 
 from tornado.escape import json_decode
@@ -63,7 +62,7 @@ class ControlSocketHandler(WebSocketHandler):
                      .format(len(self.messages), self.request.remote_ip, msg_dict))
         try:
             BrickController.process(**msg_dict)
-        except (BluetoothError):
+        except:
             BrickController.brick_found = False
             for cl in self.clients:
                 cl.write_message(BrickController.get_state())

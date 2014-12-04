@@ -9,7 +9,10 @@ class LoggerSocketHandler(WebSocketHandler):
     def open(self):
         if self not in self.clients:
             self.clients.append(self)
-        for d in WebSocketsLogHandler.dicts:
+	msgs = WebSocketsLogHandler.dicts[:]
+	if len(msgs) > 150:
+	    msgs = msgs[-150:]
+        for d in msgs:
             self.write_message(d)
 
     def on_close(self):
