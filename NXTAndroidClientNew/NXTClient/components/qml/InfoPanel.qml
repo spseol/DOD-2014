@@ -65,7 +65,7 @@ Item {
 
             y: parent.height / 1.6
 
-            text: "NXT Client"
+            text: "NXT Driver"
             color: "white"
 
             font.pixelSize: parent.height / 8

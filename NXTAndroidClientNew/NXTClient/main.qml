@@ -217,7 +217,7 @@ ApplicationWindow {
         dataRate: 10000
 
         onReadingChanged: {
-            var value = -accelometer.reading.y
+            var value = -accelometer.reading.x
             var raw_value = value
             var max = false
 
